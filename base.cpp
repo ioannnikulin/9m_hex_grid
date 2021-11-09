@@ -2,9 +2,8 @@
 #include <chrono>
 #include <thread>
 
-field::field(int rows, int cols)
+field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
 {
-    cells = vector<vector<cell*>>(rows);
     for (size_t r(0); r<cells.size(); r++)
         cells[r] = vector<cell*>(cols, NULL);
     for (size_t r(0); r<cells.size(); r++)
@@ -105,31 +104,39 @@ cell * field::look(cell * p, direction dir)
         break;
     case direction::w:
         if (row > 0)
+        {
             if (row%2 == 0)
                 tgt = cells[row-1][col];
             else if (col > 0)
                 tgt = cells[row-1][col-1];
+        }
         break;
     case direction::e:
         if (row > 0)
+        {
             if (row%2 > 0)
                 tgt = cells[row-1][col];
             else if (col < width()-1)
                 tgt = cells[row-1][col+1];
+        }
         break;
     case direction::z:
         if (row < height()-1)
+        {
             if (row%2 == 0)
                 tgt = cells[row+1][col];
             else if (col > 0)
                 tgt = cells[row+1][col-1];
+        }
         break;
     case direction::x:
         if (row < height()-1)
+        {
             if (row%2 > 0)
                 tgt = cells[row+1][col];
             else if (col < width()-1)
                 tgt = cells[row+1][col+1];
+        }
         break;
     }
     return tgt;

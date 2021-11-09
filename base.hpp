@@ -22,17 +22,21 @@ class cell
     friend class field;
     friend class pc;//for row, col
 public:
-    cell(field * p):parent(p) {}
+    cell(field * p):col(-1),row(-1),parent(p) {}
     virtual string str() = 0;
     virtual bool is_walkable() = 0;
     virtual bool is_victory() =0;
     virtual bool is_player() =0;
     int get_col() {return col;}
     int get_row() {return row;}
+    virtual ~cell() {}
 protected:
     int col;
     int row;
     field * parent;
+private:
+    cell(const cell&):col(-1),row(-1),parent(NULL){}
+    cell& operator=(const cell&){return *this;}
 };
 
 enum direction
