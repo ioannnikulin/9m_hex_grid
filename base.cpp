@@ -72,7 +72,7 @@ float pc::dist_to_exit()
 
 bool pc::won()
 {
-    return (dist_to_exit() == 0);
+    return (dist_to_exit() < 2);
 }
 
 
