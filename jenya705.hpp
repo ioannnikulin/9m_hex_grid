@@ -7,6 +7,7 @@
 #include <map>
 #include <future>
 #include <mutex>
+#include "safe.hpp"
 
 using namespace std;
 
