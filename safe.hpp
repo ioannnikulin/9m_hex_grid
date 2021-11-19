@@ -24,24 +24,18 @@ namespace jenya705 {
 
         template <typename T>
         class JustMono: public Mono<T> {
-        private:
+        protected:
             T _value;
-            std::vector<std::function<bool(T, T)>>* _conditions;
+            std::vector<std::function<bool(T, T)>> _conditions;
         public:
             JustMono(T value): _value(value) {}
 
-            JustMono(T value, std::vector<std::function<bool(T, T)>>& conditions) : JustMono<T>(value) {
-                _conditions = new std::vector<std::function<bool(T, T)>>(conditions);
-            }
-
-            ~JustMono() {
-                if (_conditions != NULL)
-                    delete _conditions;
-            }
+            JustMono(T value, std::vector<std::function<bool(T, T)>> conditions) :
+                _value(value), _conditions(conditions) {}
 
             virtual bool set(T value) {
-                if (_conditions != NULL) {
-                    for (auto iterator = _conditions->begin(); iterator < _conditions->end(); ++iterator) {
+                if (!_conditions.empty()) {
+                    for (auto iterator = _conditions.begin(); iterator < _conditions.end(); ++iterator) {
                         std::function<bool(T, T)> condition = *iterator;
                         if (!condition(_value, value)) return false;
                     }
@@ -60,30 +54,25 @@ namespace jenya705 {
         class ConcurrentMono: public JustMono<T>{
         private:
             mutable std::mutex _mutex;
-            std::condition_variable* _cv; /// Toggle feature;
-            inline JustMono<T> super() {
-                return *static_cast<JustMono<T>*>(this);
-            }
+            mutable std::mutex _cvmutex;
+            mutable std::condition_variable _cv;
+            bool _conditionVariableEnabled;
         protected:
-            std::mutex& getMutex() const;
+            std::mutex& getMutex() const {return _mutex;}
         public:
-            ConcurrentMono(T value) : JustMono<T>(value) , _mutex(std::mutex()) {}
+            ConcurrentMono(T value) : JustMono<T>(value) , _mutex(), _cvmutex(), _cv(), _conditionVariableEnabled(false) {}
 
             ConcurrentMono(T value, std::vector<std::function<bool(T, T)>>& conditions) :
                 JustMono<T>(value, conditions), _mutex(std::mutex()){}
 
             ConcurrentMono(const ConcurrentMono<T>& toCopy) = delete;
 
-            ~ConcurrentMono() {
-                if (_cv != NULL)
-                    delete _cv;
-            };
-
             virtual bool set(T value) {
                 _mutex.lock();
-                bool success = super().set(value);
-                if (success && _cv != NULL) {
-                    _cv->notify_one();
+                bool success = JustMono<T>::set(value);
+                if (success && _conditionVariableEnabled) {
+                    std::lock_guard<std::mutex> lk(_cvmutex);
+                    _cv.notify_one();
                 }
                 _mutex.unlock();
                 return success;
@@ -91,17 +80,22 @@ namespace jenya705 {
 
             virtual T get() const {
                 _mutex.lock();
-                T copy = super().get();
+                T copy = JustMono<T>::get();
                 _mutex.unlock();
                 return copy;
             }
 
             virtual void enableConditionVariable() {
-                if (_cv != NULL)
-                    _cv = new std::condition_variable();
+                _conditionVariableEnabled = true;
             }
 
-            std::condition_variable* getConditionVariable() const {
+            virtual void wait() const {
+                if (!_conditionVariableEnabled) return; // nothing to wait
+                std::unique_lock<std::mutex> lk(_cvmutex);
+                _cv.wait(lk);
+            }
+
+            std::condition_variable getConditionVariable() const {
                 return _cv;
             }
 

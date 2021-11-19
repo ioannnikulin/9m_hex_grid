@@ -408,6 +408,11 @@ namespace jenya705 {
 
     }
 
+    void c(safe::Mono<int>* mono) {
+        this_thread::sleep_for(chrono::seconds(1));
+        mono->set(1);
+    }
+
     class Bot {
     private:
         pc* bot;
@@ -417,6 +422,17 @@ namespace jenya705 {
         Bot(pc* bot) : bot(bot), virtualField(VirtualField()), position(Position({0, 0})) {}
 
         void ai() {
+
+            safe::ConcurrentMono<int>* mono = safe::concurrent(0);
+            mono->enableConditionVariable();
+            thread t(c, mono);
+            mono->wait();
+            cout << mono->get() << endl;
+            delete mono;
+            t.detach();
+
+            return;
+
             cache();
             while(!bot->won()) {
                 vector<direction> node = getNode();
