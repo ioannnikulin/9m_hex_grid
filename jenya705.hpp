@@ -7,6 +7,7 @@
 #include <map>
 #include <future>
 #include <mutex>
+#include <array>
 #include "safe.hpp"
 
 using namespace std;
@@ -33,55 +34,10 @@ namespace jenya705 {
         return new direction[7]{direction::w, direction::e, direction::d, direction::x, direction::z, direction::a, (direction) -1};
     }
 
-    template <typename T>
-    class Mono {
-    protected:
-        T value;
-        mutex* lock;
-    public:
+    vector<function<bool(int, int)>> bestPathFunctions(1, [](int first, int second){return first > second;});
 
-        Mono<T>(T value) : lock(new mutex()), value(value) {}
-
-        T get() {
-            T valueCopy;
-            lock->lock();
-            valueCopy = value;
-            lock->unlock();
-            return valueCopy;
-        }
-
-        void set(T value) {
-            lock->lock();
-            this->value = value;
-            lock->unlock();
-        }
-
-    };
-
-    template <typename T>
-    class BestMono: public Mono<T> {
-
-    protected:
-        /// true if first is better than second
-        function<bool(T, T)> bestFunction;
-
-    public:
-        BestMono<T>(T value, function<bool(T, T)> bestFunction) : Mono<T>(value), bestFunction(bestFunction) {}
-
-        bool setIfBetter(T value) {
-            this->lock->lock();
-            if (bestFunction(this->value, value)) {
-                this->lock->unlock();
-                return false;
-            }
-            this->value = value;
-            this->lock->unlock();
-            return true;
-        }
-    };
-
-    BestMono<int>* bestPathMono() {
-        return new BestMono<int>(0, [](int first, int second){return first >= second;});
+    safe::JustMono<int>* bestPathMono() {
+        return safe::just(0, bestPathFunctions);
     }
 
     char fromFieldToChar(int num) {
@@ -296,9 +252,9 @@ namespace jenya705 {
 
     };
 
-    vector<direction> getNodeAllDirections(VirtualMovement movement, vector<Point> whereWas, BestMono<int>* bestMono);
+    vector<direction> getNodeAllDirections(VirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestMono);
 
-    vector<direction> getNode(VirtualMovement movement, vector<Point> whereWas, BestMono<int>* bestNodeMono, const direction* dirs) {
+    vector<direction> getNode(VirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestNodeMono, const direction* dirs) {
         vector<direction> bestNode;
         int nodeSize = whereWas.size();
         for (int i = 0; ; ++i) {
@@ -345,7 +301,7 @@ namespace jenya705 {
                     bestNode.clear();
                     for (int i = 0; i < nextNode.size(); ++i) bestNode.push_back(nextNode[i]);
                     bestNode.push_back(dir);
-                    bestNodeMono->setIfBetter(bestNode.size() + whereWas.size());
+                    bestNodeMono->set(bestNode.size() + whereWas.size());
                 }
             }
             else if (goingTo == UNKNOWN) {
@@ -353,6 +309,7 @@ namespace jenya705 {
                 cout << "unknown! (" << whereWas.size() << ") - " << this_thread::get_id() << endl;
                 #endif
                 delete[] dirs;
+                bestNodeMono->set(1);
                 return vector<direction>(1, dir);
             }
         }
@@ -365,17 +322,14 @@ namespace jenya705 {
         return bestNode;
     }
 
-    vector<direction> getNodeAllDirections(VirtualMovement movement, vector<Point> whereWas, BestMono<int>* bestMono) {
+    vector<direction> getNodeAllDirections(VirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestMono) {
         return getNode(movement, whereWas, bestMono, generateAllDirections());
     }
 
-    typedef packaged_task<vector<direction>(VirtualMovement, vector<Point>,
-                        BestMono<int>*, const direction*)> getNodeTask;
-
     vector<direction> getNodeStarter(VirtualMovement movement, Point start) {
         #if FUTURE == 1
-        vector<pair<future<vector<direction>>, thread*>> futures;
-        BestMono<int>* mono = bestPathMono();
+        vector<pair<std::shared_ptr<safe::ConcurrentMono<vector<direction>>>, thread*>> threads;
+        std::shared_ptr<safe::Mono<int>> bestMono(bestPathMono());
         for (direction dir: ALL_DIRECTIONS) {
             VirtualMovement movementCopy = movement.copy();
             char c = movementCopy.move(dir);
@@ -383,34 +337,41 @@ namespace jenya705 {
             vector<Point> points;
             points.push_back(start);
             points.push_back(movementCopy.position.position);
-            getNodeTask packTask(getNode);
-            future<vector<direction>> packFuture = packTask.get_future();
-            thread* packThread = new thread(move(packTask), movementCopy, points, mono, getDirectionNearsArray(dir));
-            futures.push_back(make_pair(packFuture, packThread));
+            std::shared_ptr<safe::ConcurrentMono<vector<direction>>> result(safe::concurrent(vector<direction>(0)));
+            thread* thr = new thread([](
+                    std::shared_ptr<safe::ConcurrentMono<vector<direction>>> result,
+                    VirtualMovement movement,
+                    vector<Point> whereWas,
+                    std::shared_ptr<safe::Mono<int>> bestMono,
+                    const direction* dirs
+                    ){
+                        result->set(getNode(movement, whereWas, bestMono, dirs));
+                    },
+                    result,
+                    movementCopy,
+                    points,
+                    bestMono,
+                    getDirectionNearsArray(dir)
+                );
+            threads.push_back(make_pair(result, thr));
         }
         vector<direction> bestNode;
-        for (auto i = futures.begin(); i < futures.end(); ++i) {
-            pair<future<vector<direction>>, thread*> packTask = *futures;
-            packTask.second->join();
-            packTask.first.wait();
-            vector<direction> thisNode = packTask.first.get();
-            if (bestNode.empty() || bestNode.size() < thisNode.size()) bestNode = thisNode;
-            delete packTask.second;
+        for (auto& task: threads) {
+            task.first->wait();
+            vector<direction> node = task.first->get();
+            if (bestNode.empty() || node.size() < bestNode.size()) {
+                bestNode = node;
+            }
+            task.second->detach();
+            delete task.second;
         }
-        delete mono;
         return bestNode;
         #elif FUTURE == 0
-        BestMono<int>* mono = bestPathMono();
+        std::shared_ptr<safe::Mono<int>> mono(bestPathMono());
         vector<direction> result = getNodeAllDirections(movement, vector<Point>(1, movement.position.position), mono);
-        delete mono;
         return result;
         #endif // FUTURE
 
-    }
-
-    void c(safe::Mono<int>* mono) {
-        this_thread::sleep_for(chrono::seconds(1));
-        mono->set(1);
     }
 
     class Bot {
@@ -422,16 +383,6 @@ namespace jenya705 {
         Bot(pc* bot) : bot(bot), virtualField(VirtualField()), position(Position({0, 0})) {}
 
         void ai() {
-
-            safe::ConcurrentMono<int>* mono = safe::concurrent(0);
-            mono->enableConditionVariable();
-            thread t(c, mono);
-            mono->wait();
-            cout << mono->get() << endl;
-            delete mono;
-            t.detach();
-
-            return;
 
             cache();
             while(!bot->won()) {
