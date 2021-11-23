@@ -728,7 +728,7 @@ void fill_labyrinths(vector<field>& labyrinths)
 {
     ushenin_lab_1(labyrinths);
     labTruefunoff(labyrinths);
-    lab_uspenskaya(labyrinths);
+    //lab_uspenskaya(labyrinths);
     tokarenko_lab_1(labyrinths);
 }
 

@@ -27,7 +27,7 @@ namespace jenya705 {
 
     #define DEFAULT_WIDTH 100
 
-    #define DEBUG 0
+    #define DEBUG 2
     #define FUTURE 0
 
     const direction* generateAllDirections() {
@@ -318,6 +318,9 @@ namespace jenya705 {
         for (int i = 0; i < bestNode.size(); ++i) cout << bestNode[i] << " ";
         cout << "] - " << this_thread::get_id() << endl;
         #endif
+        if (bestNode.empty()) {
+            movement.getVirtualField()->set(movement.position.position, WALL);
+        }
         delete[] dirs;
         return bestNode;
     }
@@ -399,7 +402,7 @@ namespace jenya705 {
             bot->go(dir);
             position.move(dir);
             cache();
-            #if DEBUG == 1
+            #if DEBUG > 0
             virtualField.printAt(position.position);
             #endif
         }
