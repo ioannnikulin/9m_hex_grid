@@ -160,7 +160,7 @@ void lab_uspenskaya(vector<field>& labyrinths)
     labyrinths[p].set_cell(19,15, new wall(NULL));
     labyrinths[p].set_cell(19,17, new wall(NULL));
     labyrinths[p].set_cell(19,18, new wall(NULL));
-
+    labyrinths[p].set_cell(17,19, v);
     labyrinths[p].set_start_row(1);
     labyrinths[p].set_start_col(1);
 

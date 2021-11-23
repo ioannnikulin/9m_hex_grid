@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1637647347 source:p:\9m_hex_grid\base.cpp
+	"base.hpp"
+	<chrono>
+	<thread>
+
+1637647055 p:\9m_hex_grid\base.hpp
+	<iostream>
+	<vector>
+	<cmath>
+
+1637647055 source:p:\9m_hex_grid\bots.cpp
+	"base.hpp"
+
+1637647347 source:p:\9m_hex_grid\main.cpp
+	<iostream>
+	<vector>
+	<cmath>
+	"base.hpp"
+	<conio.h>
+
+1637647513 source:p:\9m_hex_grid\labyrinths.cpp
+	"base.hpp"
+
