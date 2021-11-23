@@ -1484,6 +1484,84 @@ void f_Art(vector<field>& labyrinths)
 }
 
 
+void sidorova_lab_1(vector<field>& labyrinths)
+{
+labyrinths.push_back(field(20,20));
+int p = labyrinths.size()-1;
+victory * v = new victory(&labyrinths[p]);
+labyrinths[p].set_cell(3, 18, v);
+for (int i(0); i<10; i++)
+{
+labyrinths[p].set_cell(i, 10, new wall(NULL));
+}
+for (int i(6); i<18; i++)
+{
+labyrinths[p].set_cell(i, 7, new wall(NULL));
+}
+for (int i(0); i<4; i++)
+{
+labyrinths[p].set_cell(i, 6, new wall(NULL));
+}
+for (int i(0); i<9; i++)
+{
+labyrinths[p].set_cell(i, 16, new wall(NULL));
+}
+for (int i(10); i<20; i++)
+{
+labyrinths[p].set_cell(i, 16, new wall(NULL));
+}
+for (int i(10); i<17; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(18); i<20; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(0); i<3; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(5); i<8; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(0); i<10; i++)
+{
+labyrinths[p].set_cell(19, i, new wall(NULL));
+}
+for (int i(11); i<16; i++)
+{
+labyrinths[p].set_cell(12, i, new wall(NULL));
+}
+for (int i(5); i<9; i++)
+{
+labyrinths[p].set_cell(12, i, new wall(NULL));
+}
+labyrinths[p].set_cell(14, 17, new wall(NULL));
+labyrinths[p].set_cell(16, 7, new wall(NULL));
+labyrinths[p].set_cell(2, 13, new wall(NULL));
+labyrinths[p].set_cell(12, 13, new wall(NULL));
+labyrinths[p].set_cell(10, 10, new wall(NULL));
+labyrinths[p].set_cell(8, 18, new wall(NULL));
+labyrinths[p].set_cell(15, 4, new wall(NULL));
+labyrinths[p].set_cell(17, 3, new wall(NULL));
+labyrinths[p].set_cell(3, 12, new wall(NULL));
+labyrinths[p].set_cell(5, 11, new wall(NULL));
+labyrinths[p].set_cell(16, 10, new wall(NULL));
+labyrinths[p].set_cell(15, 9, new wall(NULL));
+labyrinths[p].set_cell(3, 13, new wall(NULL));
+labyrinths[p].set_cell(17, 4, new wall(NULL));
+labyrinths[p].set_cell(17, 18, new wall(NULL));
+labyrinths[p].set_cell(17, 2, new wall(NULL));
+labyrinths[p].set_cell(3, 16, new wall(NULL));
+labyrinths[p].set_cell(5, 18, new wall(NULL));
+labyrinths[p].set_cell(3, 13, new wall(NULL));
+labyrinths[p].set_start_row(3);
+labyrinths[p].set_start_col(3);
+}
+
+
 void fill_labyrinths(vector<field>& labyrinths)
 {
 
@@ -1496,5 +1574,6 @@ void fill_labyrinths(vector<field>& labyrinths)
     lab_dubovenko(labyrinths);
     f_ermolaeva(labyrinths);
     daryina_lab_1(labyrinths);
+	sidorova_lab_1(labyrinths);
 }
 
