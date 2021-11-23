@@ -727,9 +727,8 @@ labyrinths[p].set_start_row(1);
 void fill_labyrinths(vector<field>& labyrinths)
 {
     ushenin_lab_1(labyrinths);
-    f0(labyrinths);
-    f1(labyrinths);
     labTruefunoff(labyrinths);
     lab_uspenskaya(labyrinths);
+    tokarenko_lab_1(labyrinths);
 }
 
