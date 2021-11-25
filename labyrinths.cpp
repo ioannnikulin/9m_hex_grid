@@ -1590,6 +1590,93 @@ labyrinths[p].set_start_col(3);
 }
 
 
+void skorodumov_lab_1 (vector<field>& labyrinths)
+{
+labyrinths.push_back(field(20,20));
+int p = labyrinths.size()-1;
+victory * v = new victory(&labyrinths[p]);
+labyrinths[p].set_cell(15,19, v);
+labyrinths[p].set_cell(3,4,new wall(NULL));
+labyrinths[p].set_cell(3,5,new wall(NULL));
+labyrinths[p].set_cell(3,6,new wall(NULL));
+labyrinths[p].set_cell(3,8,new wall(NULL));
+labyrinths[p].set_cell(3,12,new wall(NULL));
+labyrinths[p].set_cell(3,18,new wall(NULL));
+labyrinths[p].set_cell(3,19,new wall(NULL));
+labyrinths[p].set_cell(4,2,new wall(NULL));
+labyrinths[p].set_cell(4,3,new wall(NULL));
+labyrinths[p].set_cell(4,9,new wall(NULL));
+labyrinths[p].set_cell(4,14,new wall(NULL));
+labyrinths[p].set_cell(5,0,new wall(NULL));
+labyrinths[p].set_cell(5,1,new wall(NULL));
+labyrinths[p].set_cell(5,8,new wall(NULL));
+labyrinths[p].set_cell(5,14,new wall(NULL));
+labyrinths[p].set_cell(6,8,new wall(NULL));
+labyrinths[p].set_cell(6,15,new wall(NULL));
+labyrinths[p].set_cell(7,3,new wall(NULL));
+labyrinths[p].set_cell(7,15,new wall(NULL));
+labyrinths[p].set_cell(8,3,new wall(NULL));
+labyrinths[p].set_cell(8,6,new wall(NULL));
+labyrinths[p].set_cell(8,7,new wall(NULL));
+labyrinths[p].set_cell(8,16,new wall(NULL));
+labyrinths[p].set_cell(9,3,new wall(NULL));
+labyrinths[p].set_cell(9,7,new wall(NULL));
+labyrinths[p].set_cell(9,8,new wall(NULL));
+labyrinths[p].set_cell(9,16,new wall(NULL));
+labyrinths[p].set_cell(10,3,new wall(NULL));
+labyrinths[p].set_cell(10,4,new wall(NULL));
+labyrinths[p].set_cell(10,9,new wall(NULL));
+labyrinths[p].set_cell(10,10,new wall(NULL));
+labyrinths[p].set_cell(10,11,new wall(NULL));
+labyrinths[p].set_cell(10,12,new wall(NULL));
+labyrinths[p].set_cell(10,14,new wall(NULL));
+labyrinths[p].set_cell(10,15,new wall(NULL));
+labyrinths[p].set_cell(10,16,new wall(NULL));
+labyrinths[p].set_cell(10,17,new wall(NULL));
+labyrinths[p].set_cell(11,3,new wall(NULL));
+labyrinths[p].set_cell(11,6,new wall(NULL));
+labyrinths[p].set_cell(11,7,new wall(NULL));
+labyrinths[p].set_cell(11,8,new wall(NULL));
+labyrinths[p].set_cell(11,17,new wall(NULL));
+labyrinths[p].set_cell(12,10,new wall(NULL));
+labyrinths[p].set_cell(12,11,new wall(NULL));
+labyrinths[p].set_cell(12,18,new wall(NULL));
+labyrinths[p].set_cell(13,0,new wall(NULL));
+labyrinths[p].set_cell(13,3,new wall(NULL));
+labyrinths[p].set_cell(13,12,new wall(NULL));
+labyrinths[p].set_cell(13,15,new wall(NULL));
+labyrinths[p].set_cell(13,18,new wall(NULL));
+labyrinths[p].set_cell(14,4,new wall(NULL));
+labyrinths[p].set_cell(14,0,new wall(NULL));
+labyrinths[p].set_cell(14,3,new wall(NULL));
+labyrinths[p].set_cell(14,4,new wall(NULL));
+labyrinths[p].set_cell(14,5,new wall(NULL));
+labyrinths[p].set_cell(14,11,new wall(NULL));
+labyrinths[p].set_cell(14,12,new wall(NULL));
+labyrinths[p].set_cell(15,5,new wall(NULL));
+labyrinths[p].set_cell(15,6,new wall(NULL));
+labyrinths[p].set_cell(15,7,new wall(NULL));
+labyrinths[p].set_cell(15,8,new wall(NULL));
+labyrinths[p].set_cell(15,9,new wall(NULL));
+labyrinths[p].set_cell(15,10,new wall(NULL));
+labyrinths[p].set_cell(15,11,new wall(NULL));
+labyrinths[p].set_cell(15,12,new wall(NULL));
+labyrinths[p].set_cell(16,13,new wall(NULL));
+labyrinths[p].set_cell(16,15,new wall(NULL));
+labyrinths[p].set_cell(16,18,new wall(NULL));
+labyrinths[p].set_cell(17,5,new wall(NULL));
+labyrinths[p].set_cell(17,13,new wall(NULL));
+labyrinths[p].set_cell(17,14,new wall(NULL));
+labyrinths[p].set_cell(17,15,new wall(NULL));
+labyrinths[p].set_cell(17,17,new wall(NULL));
+labyrinths[p].set_cell(18,4,new wall(NULL));
+labyrinths[p].set_cell(18,15,new wall(NULL));
+labyrinths[p].set_cell(19,4,new wall(NULL));
+labyrinths[p].set_cell(19,15,new wall(NULL));
+labyrinths[p].set_start_row(19);
+labyrinths[p].set_start_col(0);
+}
+
 void fill_labyrinths(vector<field>& labyrinths)
 {
 
@@ -1604,5 +1691,6 @@ void fill_labyrinths(vector<field>& labyrinths)
     daryina_lab_1(labyrinths);
 	sidorova_lab_1(labyrinths);
     karpov_lab_1(labyrinths);
+    skorodumov_lab_1(labyrinths);
 }
 
