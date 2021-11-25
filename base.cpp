@@ -72,7 +72,7 @@ float pc::dist_to_exit()
 
 bool pc::won()
 {
-    return (dist_to_exit() == 0);
+    return (dist_to_exit() < 2);
 }
 
 
@@ -149,6 +149,7 @@ bool field::can_go(pc * p, direction dir)
 {
     cell * tgt = look(p, dir);
     if (tgt!=NULL) return tgt->is_walkable();
+    return false;
 }
 
 void field::go(pc * p, direction dir)
