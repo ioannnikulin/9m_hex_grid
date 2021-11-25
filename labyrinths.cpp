@@ -1589,6 +1589,58 @@ labyrinths[p].set_start_row(3);
 labyrinths[p].set_start_col(3);
 }
 
+void evtukhov_lab(vector<field>& labyrinths){
+    int p = labyrinths.size();
+    labyrinths.push_back(field(20, 20));
+    victory * v = new victory(&labyrinths[p]);
+    labyrinths[p].set_cell(0,0, new wall(NULL));
+    labyrinths[p].set_start_row(1);
+    labyrinths[p].set_start_col(2);
+    labyrinths[p].set_cell(1,6, new wall(NULL));
+    labyrinths[p].set_cell(3,6, new wall(NULL));
+    labyrinths[p].set_cell(3,15, new wall(NULL));
+    labyrinths[p].set_cell(4,4, new wall(NULL));
+    labyrinths[p].set_cell(4,6, new wall(NULL));
+    labyrinths[p].set_cell(4,16, new wall(NULL));
+    labyrinths[p].set_cell(4,19, new wall(NULL));
+    labyrinths[p].set_cell(5,2, new wall(NULL));
+    labyrinths[p].set_cell(5,8, new wall(NULL));
+    labyrinths[p].set_cell(5,19, new wall(NULL));
+    labyrinths[p].set_cell(6,11, new wall(NULL));
+    labyrinths[p].set_cell(6,13, new wall(NULL));
+    labyrinths[p].set_cell(6,14, new wall(NULL));
+    labyrinths[p].set_cell(6,18, new wall(NULL));
+    labyrinths[p].set_cell(7,17, new wall(NULL));
+    labyrinths[p].set_cell(8,0, new wall(NULL));
+    labyrinths[p].set_cell(8,7, new wall(NULL));
+    labyrinths[p].set_cell(8,13, new wall(NULL));
+    labyrinths[p].set_cell(9,13, new wall(NULL));
+    labyrinths[p].set_cell(9,15, new wall(NULL));
+    labyrinths[p].set_cell(9,17, new wall(NULL));
+    labyrinths[p].set_cell(11,3, new wall(NULL));
+    labyrinths[p].set_cell(11,4, new wall(NULL));
+    labyrinths[p].set_cell(11,13, new wall(NULL));
+    labyrinths[p].set_cell(13,1, new wall(NULL));
+    labyrinths[p].set_cell(13,3, new wall(NULL));
+    labyrinths[p].set_cell(13,5, new wall(NULL));
+    labyrinths[p].set_cell(13,10, new wall(NULL));
+    labyrinths[p].set_cell(14,6, new wall(NULL));
+    labyrinths[p].set_cell(14,7, new wall(NULL));
+    labyrinths[p].set_cell(14,8, new wall(NULL));
+    labyrinths[p].set_cell(14,19, new wall(NULL));
+    labyrinths[p].set_cell(16,5, new wall(NULL));
+    labyrinths[p].set_cell(16,17, new wall(NULL));
+    labyrinths[p].set_cell(16,19, new wall(NULL));
+    labyrinths[p].set_cell(17,8, new wall(NULL));
+    labyrinths[p].set_cell(18,0, new wall(NULL));
+    labyrinths[p].set_cell(18,15, new wall(NULL));
+    labyrinths[p].set_cell(18,17, new wall(NULL));
+    labyrinths[p].set_cell(19,6, new wall(NULL));
+    labyrinths[p].set_cell(19,19, v);
+}
+
+
+
 
 void skorodumov_lab_1 (vector<field>& labyrinths)
 {
