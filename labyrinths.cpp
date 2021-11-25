@@ -46,8 +46,8 @@ void karpov_lab_1(vector<field>& labyrinths)
     }
     labyrinths[p].set_cell(19,2, new wall(NULL));
     labyrinths[p].set_cell(20,20, v);
-    labyrinths[p].set_start_row(1);
-    labyrinths[p].set_start_col(1);
+    labyrinths[p].set_start_row(8);
+    labyrinths[p].set_start_col(10);
 }
 void daryina_lab_1(vector<field>& labyrinths)
 {
