@@ -1,4 +1,5 @@
 #include "base.hpp"
+#include "jenya705.hpp"
 
 class right_bot:public pc
 {
@@ -78,5 +79,6 @@ public:
 
 void fill_bots(vector<pc*> & bots)
 {
-   bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
+    bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
+  
 }
