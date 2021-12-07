@@ -1744,5 +1744,6 @@ void fill_labyrinths(vector<field>& labyrinths)
 	sidorova_lab_1(labyrinths);
     karpov_lab_1(labyrinths);
     skorodumov_lab_1(labyrinths);
+    evtukhov_lab(labyrinths);
 }
 
