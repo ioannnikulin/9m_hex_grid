@@ -21,6 +21,34 @@ void f1(vector<field>& labyrinths)
     labyrinths[p].set_start_row(0);
     labyrinths[p].set_start_col(0);
 }
+void karpov_lab_1(vector<field>& labyrinths)
+{
+    labyrinths.push_back(field(22,22));
+    int p = labyrinths.size()-1;
+    victory * v = new victory(&labyrinths[p]);
+    for(int i=0;i<=21;i++){
+    labyrinths[p].set_cell(0,i, new wall(NULL));
+    labyrinths[p].set_cell(21,i, new wall(NULL));
+    labyrinths[p].set_cell(i,0, new wall(NULL));
+    labyrinths[p].set_cell(i,21, new wall(NULL));
+    if(i<=6 or i>=9 and i<=18){labyrinths[p].set_cell(3,i, new wall(NULL));}
+    if(i>=3 and i<=9){labyrinths[p].set_cell(i,18, new wall(NULL));}
+    if(i>=3 and i<=15){labyrinths[p].set_cell(6,i, new wall(NULL));}
+    if(i>=6 and i<=17){labyrinths[p].set_cell(9,i, new wall(NULL));}
+    if(i>=6 and i<=9){labyrinths[p].set_cell(i,15, new wall(NULL));}
+    if(i>=3 and i<=20){labyrinths[p].set_cell(12,i, new wall(NULL));}
+    if(i>=6 and i<=12 or i>=15 and i<=18){labyrinths[p].set_cell(i,3, new wall(NULL));}
+    if(i>=3 and i<=6 or i>=15 and i<=20){labyrinths[p].set_cell(18,i, new wall(NULL));}
+    if(i>=13 and i<=18){labyrinths[p].set_cell(i,6, new wall(NULL));}
+    if(i>=15 and i<=18){labyrinths[p].set_cell(i,9, new wall(NULL));}
+    if(i>=15 and i<=20){labyrinths[p].set_cell(i,12, new wall(NULL));}
+    if(i>=12 and i<=18){labyrinths[p].set_cell(15,i, new wall(NULL));}
+    }
+    labyrinths[p].set_cell(19,2, new wall(NULL));
+    labyrinths[p].set_cell(20,20, v);
+    labyrinths[p].set_start_row(8);
+    labyrinths[p].set_start_col(10);
+}
 void daryina_lab_1(vector<field>& labyrinths)
 {
     labyrinths.push_back(field(20,20));
@@ -985,6 +1013,245 @@ labyrinths[p].set_cell(7,15, v);
 labyrinths[p].set_start_col(1);
 labyrinths[p].set_start_row(1);
 }
+void lab_dubovenko(vector<field>& labyrinths)
+   {
+    labyrinths.push_back(field(20, 20));
+    int p = labyrinths.size()-1;
+    victory * v = new victory(&labyrinths[p]);
+    labyrinths[p].set_start_row(0);
+    labyrinths[p].set_start_col(0);
+    labyrinths[p].set_cell(1,0, new wall(NULL));
+    labyrinths[p].set_cell(2,0, new wall(NULL));
+    labyrinths[p].set_cell(3,0, new wall(NULL));
+    labyrinths[p].set_cell(4,0, new wall(NULL));
+    labyrinths[p].set_cell(5,0, new wall(NULL));
+    labyrinths[p].set_cell(6,0, new wall(NULL));
+    labyrinths[p].set_cell(7,0, new wall(NULL));
+    labyrinths[p].set_cell(8,0, new wall(NULL));
+    labyrinths[p].set_cell(9,0, new wall(NULL));
+    labyrinths[p].set_cell(10,0, new wall(NULL));
+    labyrinths[p].set_cell(11,0, new wall(NULL));
+    labyrinths[p].set_cell(12,0, new wall(NULL));
+    labyrinths[p].set_cell(13,0, new wall(NULL));
+    labyrinths[p].set_cell(14,0, new wall(NULL));
+    labyrinths[p].set_cell(15,0, new wall(NULL));
+    labyrinths[p].set_cell(16,0, new wall(NULL));
+    labyrinths[p].set_cell(17,0, new wall(NULL));
+    labyrinths[p].set_cell(18,0, new wall(NULL));
+    labyrinths[p].set_cell(19,0, new wall(NULL));
+    labyrinths[p].set_cell(19,1, new wall(NULL));
+
+    labyrinths[p].set_cell(19,4, new wall(NULL));
+    labyrinths[p].set_cell(19,5, new wall(NULL));
+    labyrinths[p].set_cell(19,6, new wall(NULL));
+    labyrinths[p].set_cell(19,7, new wall(NULL));
+    labyrinths[p].set_cell(19,8, new wall(NULL));
+    labyrinths[p].set_cell(19,9, new wall(NULL));
+    labyrinths[p].set_cell(19,10, new wall(NULL));
+    labyrinths[p].set_cell(19,11, new wall(NULL));
+    labyrinths[p].set_cell(19,12, new wall(NULL));
+    labyrinths[p].set_cell(19,13, new wall(NULL));
+    labyrinths[p].set_cell(19,14, new wall(NULL));
+    labyrinths[p].set_cell(19,15, new wall(NULL));
+    labyrinths[p].set_cell(19,16, new wall(NULL));
+    labyrinths[p].set_cell(19,17, new wall(NULL));
+    labyrinths[p].set_cell(19,18, new wall(NULL));
+    labyrinths[p].set_cell(0,1, new wall(NULL));
+    labyrinths[p].set_cell(0,2, new wall(NULL));
+    labyrinths[p].set_cell(0,3, new wall(NULL));
+    labyrinths[p].set_cell(0,4, new wall(NULL));
+    labyrinths[p].set_cell(0,5, new wall(NULL));
+    labyrinths[p].set_cell(0,6, new wall(NULL));
+    labyrinths[p].set_cell(0,7, new wall(NULL));
+    labyrinths[p].set_cell(0,8, new wall(NULL));
+    labyrinths[p].set_cell(0,9, new wall(NULL));
+    labyrinths[p].set_cell(0,10, new wall(NULL));
+    labyrinths[p].set_cell(0,11, new wall(NULL));
+    labyrinths[p].set_cell(0,12, new wall(NULL));
+
+    labyrinths[p].set_cell(0,15, new wall(NULL));
+    labyrinths[p].set_cell(0,16, new wall(NULL));
+    labyrinths[p].set_cell(0,17, new wall(NULL));
+    labyrinths[p].set_cell(0,18, new wall(NULL));
+    labyrinths[p].set_cell(1,18, new wall(NULL));
+    labyrinths[p].set_cell(2,18, new wall(NULL));
+    labyrinths[p].set_cell(3,18, new wall(NULL));
+
+    labyrinths[p].set_cell(5,18, new wall(NULL));
+    labyrinths[p].set_cell(6,18, new wall(NULL));
+    labyrinths[p].set_cell(7,18, new wall(NULL));
+    labyrinths[p].set_cell(8,18, new wall(NULL));
+    labyrinths[p].set_cell(9,18, new wall(NULL));
+    labyrinths[p].set_cell(10,18, new wall(NULL));
+    labyrinths[p].set_cell(11,18, new wall(NULL));
+
+    labyrinths[p].set_cell(13,18, new wall(NULL));
+    labyrinths[p].set_cell(14,18, new wall(NULL));
+    labyrinths[p].set_cell(15,18, new wall(NULL));
+    labyrinths[p].set_cell(16,18, new wall(NULL));
+    labyrinths[p].set_cell(17,18, new wall(NULL));
+    labyrinths[p].set_cell(18,18, new wall(NULL));
+    labyrinths[p].set_cell(19,18, new wall(NULL));
+    labyrinths[p].set_cell(1,2, new wall(NULL));
+    labyrinths[p].set_cell(2,2, new wall(NULL));
+
+    labyrinths[p].set_cell(4,2, new wall(NULL));
+    labyrinths[p].set_cell(5,2, new wall(NULL));
+    labyrinths[p].set_cell(6,2, new wall(NULL));
+    labyrinths[p].set_cell(7,2, new wall(NULL));
+
+    labyrinths[p].set_cell(9,2, new wall(NULL));
+    labyrinths[p].set_cell(10,2, new wall(NULL));
+    labyrinths[p].set_cell(11,2, new wall(NULL));
+    labyrinths[p].set_cell(12,2, new wall(NULL));
+    labyrinths[p].set_cell(13,2, new wall(NULL));
+    labyrinths[p].set_cell(14,2, new wall(NULL));
+    labyrinths[p].set_cell(15,2, new wall(NULL));
+    labyrinths[p].set_cell(16,2, new wall(NULL));
+    labyrinths[p].set_cell(17,2, new wall(NULL));
+    labyrinths[p].set_cell(18,2, new wall(NULL));
+
+    labyrinths[p].set_cell(1,4, new wall(NULL));
+    labyrinths[p].set_cell(2,4, new wall(NULL));
+    labyrinths[p].set_cell(3,4, new wall(NULL));
+    labyrinths[p].set_cell(4,4, new wall(NULL));
+    labyrinths[p].set_cell(5,4, new wall(NULL));
+
+    labyrinths[p].set_cell(7,4, new wall(NULL));
+    labyrinths[p].set_cell(8,4, new wall(NULL));
+    labyrinths[p].set_cell(9,4, new wall(NULL));
+    labyrinths[p].set_cell(10,4, new wall(NULL));
+    labyrinths[p].set_cell(11,4, new wall(NULL));
+    labyrinths[p].set_cell(12,4, new wall(NULL));
+    labyrinths[p].set_cell(13,4, new wall(NULL));
+    labyrinths[p].set_cell(14,4, new wall(NULL));
+    labyrinths[p].set_cell(15,4, new wall(NULL));
+    labyrinths[p].set_cell(16,4, new wall(NULL));
+    labyrinths[p].set_cell(17,4, new wall(NULL));
+    labyrinths[p].set_cell(18,4, new wall(NULL));
+    labyrinths[p].set_cell(19,4, new wall(NULL));
+    labyrinths[p].set_cell(1,6, new wall(NULL));
+    labyrinths[p].set_cell(2,6, new wall(NULL));
+    labyrinths[p].set_cell(3,6, new wall(NULL));
+    labyrinths[p].set_cell(4,6, new wall(NULL));
+    labyrinths[p].set_cell(5,6, new wall(NULL));
+    labyrinths[p].set_cell(6,6, new wall(NULL));
+    labyrinths[p].set_cell(7,6, new wall(NULL));
+    labyrinths[p].set_cell(8,6, new wall(NULL));
+    labyrinths[p].set_cell(9,6, new wall(NULL));
+    labyrinths[p].set_cell(10,6, new wall(NULL));
+    labyrinths[p].set_cell(11,6, new wall(NULL));
+    labyrinths[p].set_cell(12,6, new wall(NULL));
+    labyrinths[p].set_cell(13,6, new wall(NULL));
+
+    labyrinths[p].set_cell(15,6, new wall(NULL));
+    labyrinths[p].set_cell(16,6, new wall(NULL));
+    labyrinths[p].set_cell(17,6, new wall(NULL));
+    labyrinths[p].set_cell(18,6, new wall(NULL));
+    labyrinths[p].set_cell(19,6, new wall(NULL));
+    labyrinths[p].set_cell(1,8, new wall(NULL));
+
+    labyrinths[p].set_cell(3,8, new wall(NULL));
+    labyrinths[p].set_cell(4,8, new wall(NULL));
+    labyrinths[p].set_cell(5,8, new wall(NULL));
+    labyrinths[p].set_cell(6,8, new wall(NULL));
+    labyrinths[p].set_cell(7,8, new wall(NULL));
+    labyrinths[p].set_cell(8,8, new wall(NULL));
+    labyrinths[p].set_cell(8,9, new wall(NULL));
+    labyrinths[p].set_cell(10,8, new wall(NULL));
+    labyrinths[p].set_cell(11,8, new wall(NULL));
+    labyrinths[p].set_cell(12,8, new wall(NULL));
+    labyrinths[p].set_cell(13,8, new wall(NULL));
+    labyrinths[p].set_cell(14,8, new wall(NULL));
+    labyrinths[p].set_cell(15,8, new wall(NULL));
+    labyrinths[p].set_cell(16,8, new wall(NULL));
+    labyrinths[p].set_cell(17,8, new wall(NULL));
+    labyrinths[p].set_cell(18,8, new wall(NULL));
+    labyrinths[p].set_cell(19,8, new wall(NULL));
+    labyrinths[p].set_cell(1,10, new wall(NULL));
+    labyrinths[p].set_cell(2,10, new wall(NULL));
+    labyrinths[p].set_cell(3,10, new wall(NULL));
+    labyrinths[p].set_cell(4,10, new wall(NULL));
+    labyrinths[p].set_cell(5,10, new wall(NULL));
+    labyrinths[p].set_cell(6,10, new wall(NULL));
+    labyrinths[p].set_cell(7,10, new wall(NULL));
+    labyrinths[p].set_cell(8,10, new wall(NULL));
+
+    labyrinths[p].set_cell(10,10, new wall(NULL));
+    labyrinths[p].set_cell(11,10, new wall(NULL));
+
+    labyrinths[p].set_cell(13,10, new wall(NULL));
+    labyrinths[p].set_cell(14,10, new wall(NULL));
+    labyrinths[p].set_cell(15,10, new wall(NULL));
+    labyrinths[p].set_cell(16,10, new wall(NULL));
+    labyrinths[p].set_cell(17,10, new wall(NULL));
+    labyrinths[p].set_cell(18,10, new wall(NULL));
+    labyrinths[p].set_cell(19,10, new wall(NULL));
+    labyrinths[p].set_cell(1,12, new wall(NULL));
+    labyrinths[p].set_cell(2,12, new wall(NULL));
+    labyrinths[p].set_cell(3,12, new wall(NULL));
+    labyrinths[p].set_cell(4,12, new wall(NULL));
+    labyrinths[p].set_cell(5,12, new wall(NULL));
+
+    labyrinths[p].set_cell(7,12, new wall(NULL));
+    labyrinths[p].set_cell(8,12, new wall(NULL));
+    labyrinths[p].set_cell(9,12, new wall(NULL));
+    labyrinths[p].set_cell(10,12, new wall(NULL));
+    labyrinths[p].set_cell(11,12, new wall(NULL));
+    labyrinths[p].set_cell(12,12, new wall(NULL));
+    labyrinths[p].set_cell(13,12, new wall(NULL));
+    labyrinths[p].set_cell(14,12, new wall(NULL));
+    labyrinths[p].set_cell(15,12, new wall(NULL));
+
+    labyrinths[p].set_cell(17,12, new wall(NULL));
+    labyrinths[p].set_cell(18,12, new wall(NULL));
+    labyrinths[p].set_cell(19,12, new wall(NULL));
+    labyrinths[p].set_cell(1,14, new wall(NULL));
+
+    labyrinths[p].set_cell(3,14, new wall(NULL));
+    labyrinths[p].set_cell(4,14, new wall(NULL));
+    labyrinths[p].set_cell(5,14, new wall(NULL));
+    labyrinths[p].set_cell(6,14, new wall(NULL));
+    labyrinths[p].set_cell(7,14, new wall(NULL));
+    labyrinths[p].set_cell(8,14, new wall(NULL));
+    labyrinths[p].set_cell(9,14, new wall(NULL));
+
+    labyrinths[p].set_cell(11,14, new wall(NULL));
+    labyrinths[p].set_cell(12,14, new wall(NULL));
+    labyrinths[p].set_cell(13,14, new wall(NULL));
+    labyrinths[p].set_cell(14,14, new wall(NULL));
+    labyrinths[p].set_cell(15,14, new wall(NULL));
+    labyrinths[p].set_cell(16,14, new wall(NULL));
+    labyrinths[p].set_cell(17,14, new wall(NULL));
+    labyrinths[p].set_cell(18,14, new wall(NULL));
+    labyrinths[p].set_cell(19,14, new wall(NULL));
+    labyrinths[p].set_cell(1,16, new wall(NULL));
+    labyrinths[p].set_cell(2,16, new wall(NULL));
+
+    labyrinths[p].set_cell(4,16, new wall(NULL));
+    labyrinths[p].set_cell(5,16, new wall(NULL));
+    labyrinths[p].set_cell(6,16, new wall(NULL));
+    labyrinths[p].set_cell(7,16, new wall(NULL));
+    labyrinths[p].set_cell(8,16, new wall(NULL));
+    labyrinths[p].set_cell(9,16, new wall(NULL));
+    labyrinths[p].set_cell(10,16, new wall(NULL));
+    labyrinths[p].set_cell(11,16, new wall(NULL));
+    labyrinths[p].set_cell(12,16, new wall(NULL));
+    labyrinths[p].set_cell(13,16, new wall(NULL));
+
+    labyrinths[p].set_cell(15,16, new wall(NULL));
+    labyrinths[p].set_cell(16,16, new wall(NULL));
+    labyrinths[p].set_cell(17,16, new wall(NULL));
+    labyrinths[p].set_cell(18,16, new wall(NULL));
+    labyrinths[p].set_cell(19,16, new wall(NULL));
+    labyrinths[p].set_cell(13,19, new wall(NULL));
+    labyrinths[p].set_cell(12,17, new wall(NULL));
+    labyrinths[p].set_cell(12,18, new wall(NULL));
+    labyrinths[p].set_cell(10,13, new wall(NULL));
+    labyrinths[p].set_cell(10,15, new wall(NULL));
+    labyrinths[p].set_cell(11,15, new wall(NULL));
+    labyrinths[p].set_cell(12,19, v);
+   }
 
 
 void f_Art(vector<field>& labyrinths)
@@ -1244,6 +1511,224 @@ void f_Art(vector<field>& labyrinths)
     labyrinths[p].set_start_col(0);
 }
 
+
+void sidorova_lab_1(vector<field>& labyrinths)
+{
+labyrinths.push_back(field(20,20));
+int p = labyrinths.size()-1;
+victory * v = new victory(&labyrinths[p]);
+labyrinths[p].set_cell(3, 18, v);
+for (int i(0); i<10; i++)
+{
+labyrinths[p].set_cell(i, 10, new wall(NULL));
+}
+for (int i(6); i<18; i++)
+{
+labyrinths[p].set_cell(i, 7, new wall(NULL));
+}
+for (int i(0); i<4; i++)
+{
+labyrinths[p].set_cell(i, 6, new wall(NULL));
+}
+for (int i(0); i<9; i++)
+{
+labyrinths[p].set_cell(i, 16, new wall(NULL));
+}
+for (int i(10); i<20; i++)
+{
+labyrinths[p].set_cell(i, 16, new wall(NULL));
+}
+for (int i(10); i<17; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(18); i<20; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(0); i<3; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(5); i<8; i++)
+{
+labyrinths[p].set_cell(6, i, new wall(NULL));
+}
+for (int i(0); i<10; i++)
+{
+labyrinths[p].set_cell(19, i, new wall(NULL));
+}
+for (int i(11); i<16; i++)
+{
+labyrinths[p].set_cell(12, i, new wall(NULL));
+}
+for (int i(5); i<9; i++)
+{
+labyrinths[p].set_cell(12, i, new wall(NULL));
+}
+labyrinths[p].set_cell(14, 17, new wall(NULL));
+labyrinths[p].set_cell(16, 7, new wall(NULL));
+labyrinths[p].set_cell(2, 13, new wall(NULL));
+labyrinths[p].set_cell(12, 13, new wall(NULL));
+labyrinths[p].set_cell(10, 10, new wall(NULL));
+labyrinths[p].set_cell(8, 18, new wall(NULL));
+labyrinths[p].set_cell(15, 4, new wall(NULL));
+labyrinths[p].set_cell(17, 3, new wall(NULL));
+labyrinths[p].set_cell(3, 12, new wall(NULL));
+labyrinths[p].set_cell(5, 11, new wall(NULL));
+labyrinths[p].set_cell(16, 10, new wall(NULL));
+labyrinths[p].set_cell(15, 9, new wall(NULL));
+labyrinths[p].set_cell(3, 13, new wall(NULL));
+labyrinths[p].set_cell(17, 4, new wall(NULL));
+labyrinths[p].set_cell(17, 18, new wall(NULL));
+labyrinths[p].set_cell(17, 2, new wall(NULL));
+labyrinths[p].set_cell(3, 16, new wall(NULL));
+labyrinths[p].set_cell(5, 18, new wall(NULL));
+labyrinths[p].set_cell(3, 13, new wall(NULL));
+labyrinths[p].set_start_row(3);
+labyrinths[p].set_start_col(3);
+}
+
+void evtukhov_lab(vector<field>& labyrinths){
+    int p = labyrinths.size();
+    labyrinths.push_back(field(20, 20));
+    victory * v = new victory(&labyrinths[p]);
+    labyrinths[p].set_cell(0,0, new wall(NULL));
+    labyrinths[p].set_start_row(1);
+    labyrinths[p].set_start_col(2);
+    labyrinths[p].set_cell(1,6, new wall(NULL));
+    labyrinths[p].set_cell(3,6, new wall(NULL));
+    labyrinths[p].set_cell(3,15, new wall(NULL));
+    labyrinths[p].set_cell(4,4, new wall(NULL));
+    labyrinths[p].set_cell(4,6, new wall(NULL));
+    labyrinths[p].set_cell(4,16, new wall(NULL));
+    labyrinths[p].set_cell(4,19, new wall(NULL));
+    labyrinths[p].set_cell(5,2, new wall(NULL));
+    labyrinths[p].set_cell(5,8, new wall(NULL));
+    labyrinths[p].set_cell(5,19, new wall(NULL));
+    labyrinths[p].set_cell(6,11, new wall(NULL));
+    labyrinths[p].set_cell(6,13, new wall(NULL));
+    labyrinths[p].set_cell(6,14, new wall(NULL));
+    labyrinths[p].set_cell(6,18, new wall(NULL));
+    labyrinths[p].set_cell(7,17, new wall(NULL));
+    labyrinths[p].set_cell(8,0, new wall(NULL));
+    labyrinths[p].set_cell(8,7, new wall(NULL));
+    labyrinths[p].set_cell(8,13, new wall(NULL));
+    labyrinths[p].set_cell(9,13, new wall(NULL));
+    labyrinths[p].set_cell(9,15, new wall(NULL));
+    labyrinths[p].set_cell(9,17, new wall(NULL));
+    labyrinths[p].set_cell(11,3, new wall(NULL));
+    labyrinths[p].set_cell(11,4, new wall(NULL));
+    labyrinths[p].set_cell(11,13, new wall(NULL));
+    labyrinths[p].set_cell(13,1, new wall(NULL));
+    labyrinths[p].set_cell(13,3, new wall(NULL));
+    labyrinths[p].set_cell(13,5, new wall(NULL));
+    labyrinths[p].set_cell(13,10, new wall(NULL));
+    labyrinths[p].set_cell(14,6, new wall(NULL));
+    labyrinths[p].set_cell(14,7, new wall(NULL));
+    labyrinths[p].set_cell(14,8, new wall(NULL));
+    labyrinths[p].set_cell(14,19, new wall(NULL));
+    labyrinths[p].set_cell(16,5, new wall(NULL));
+    labyrinths[p].set_cell(16,17, new wall(NULL));
+    labyrinths[p].set_cell(16,19, new wall(NULL));
+    labyrinths[p].set_cell(17,8, new wall(NULL));
+    labyrinths[p].set_cell(18,0, new wall(NULL));
+    labyrinths[p].set_cell(18,15, new wall(NULL));
+    labyrinths[p].set_cell(18,17, new wall(NULL));
+    labyrinths[p].set_cell(19,6, new wall(NULL));
+    labyrinths[p].set_cell(19,19, v);
+}
+
+
+
+
+void skorodumov_lab_1 (vector<field>& labyrinths)
+{
+labyrinths.push_back(field(20,20));
+int p = labyrinths.size()-1;
+victory * v = new victory(&labyrinths[p]);
+labyrinths[p].set_cell(15,19, v);
+labyrinths[p].set_cell(3,4,new wall(NULL));
+labyrinths[p].set_cell(3,5,new wall(NULL));
+labyrinths[p].set_cell(3,6,new wall(NULL));
+labyrinths[p].set_cell(3,8,new wall(NULL));
+labyrinths[p].set_cell(3,12,new wall(NULL));
+labyrinths[p].set_cell(3,18,new wall(NULL));
+labyrinths[p].set_cell(3,19,new wall(NULL));
+labyrinths[p].set_cell(4,2,new wall(NULL));
+labyrinths[p].set_cell(4,3,new wall(NULL));
+labyrinths[p].set_cell(4,9,new wall(NULL));
+labyrinths[p].set_cell(4,14,new wall(NULL));
+labyrinths[p].set_cell(5,0,new wall(NULL));
+labyrinths[p].set_cell(5,1,new wall(NULL));
+labyrinths[p].set_cell(5,8,new wall(NULL));
+labyrinths[p].set_cell(5,14,new wall(NULL));
+labyrinths[p].set_cell(6,8,new wall(NULL));
+labyrinths[p].set_cell(6,15,new wall(NULL));
+labyrinths[p].set_cell(7,3,new wall(NULL));
+labyrinths[p].set_cell(7,15,new wall(NULL));
+labyrinths[p].set_cell(8,3,new wall(NULL));
+labyrinths[p].set_cell(8,6,new wall(NULL));
+labyrinths[p].set_cell(8,7,new wall(NULL));
+labyrinths[p].set_cell(8,16,new wall(NULL));
+labyrinths[p].set_cell(9,3,new wall(NULL));
+labyrinths[p].set_cell(9,7,new wall(NULL));
+labyrinths[p].set_cell(9,8,new wall(NULL));
+labyrinths[p].set_cell(9,16,new wall(NULL));
+labyrinths[p].set_cell(10,3,new wall(NULL));
+labyrinths[p].set_cell(10,4,new wall(NULL));
+labyrinths[p].set_cell(10,9,new wall(NULL));
+labyrinths[p].set_cell(10,10,new wall(NULL));
+labyrinths[p].set_cell(10,11,new wall(NULL));
+labyrinths[p].set_cell(10,12,new wall(NULL));
+labyrinths[p].set_cell(10,14,new wall(NULL));
+labyrinths[p].set_cell(10,15,new wall(NULL));
+labyrinths[p].set_cell(10,16,new wall(NULL));
+labyrinths[p].set_cell(10,17,new wall(NULL));
+labyrinths[p].set_cell(11,3,new wall(NULL));
+labyrinths[p].set_cell(11,6,new wall(NULL));
+labyrinths[p].set_cell(11,7,new wall(NULL));
+labyrinths[p].set_cell(11,8,new wall(NULL));
+labyrinths[p].set_cell(11,17,new wall(NULL));
+labyrinths[p].set_cell(12,10,new wall(NULL));
+labyrinths[p].set_cell(12,11,new wall(NULL));
+labyrinths[p].set_cell(12,18,new wall(NULL));
+labyrinths[p].set_cell(13,0,new wall(NULL));
+labyrinths[p].set_cell(13,3,new wall(NULL));
+labyrinths[p].set_cell(13,12,new wall(NULL));
+labyrinths[p].set_cell(13,15,new wall(NULL));
+labyrinths[p].set_cell(13,18,new wall(NULL));
+labyrinths[p].set_cell(14,4,new wall(NULL));
+labyrinths[p].set_cell(14,0,new wall(NULL));
+labyrinths[p].set_cell(14,3,new wall(NULL));
+labyrinths[p].set_cell(14,4,new wall(NULL));
+labyrinths[p].set_cell(14,5,new wall(NULL));
+labyrinths[p].set_cell(14,11,new wall(NULL));
+labyrinths[p].set_cell(14,12,new wall(NULL));
+labyrinths[p].set_cell(15,5,new wall(NULL));
+labyrinths[p].set_cell(15,6,new wall(NULL));
+labyrinths[p].set_cell(15,7,new wall(NULL));
+labyrinths[p].set_cell(15,8,new wall(NULL));
+labyrinths[p].set_cell(15,9,new wall(NULL));
+labyrinths[p].set_cell(15,10,new wall(NULL));
+labyrinths[p].set_cell(15,11,new wall(NULL));
+labyrinths[p].set_cell(15,12,new wall(NULL));
+labyrinths[p].set_cell(16,13,new wall(NULL));
+labyrinths[p].set_cell(16,15,new wall(NULL));
+labyrinths[p].set_cell(16,18,new wall(NULL));
+labyrinths[p].set_cell(17,5,new wall(NULL));
+labyrinths[p].set_cell(17,13,new wall(NULL));
+labyrinths[p].set_cell(17,14,new wall(NULL));
+labyrinths[p].set_cell(17,15,new wall(NULL));
+labyrinths[p].set_cell(17,17,new wall(NULL));
+labyrinths[p].set_cell(18,4,new wall(NULL));
+labyrinths[p].set_cell(18,15,new wall(NULL));
+labyrinths[p].set_cell(19,4,new wall(NULL));
+labyrinths[p].set_cell(19,15,new wall(NULL));
+labyrinths[p].set_start_row(19);
+labyrinths[p].set_start_col(0);
+}
+
 void fill_labyrinths(vector<field>& labyrinths)
 {
 
@@ -1253,7 +1738,12 @@ void fill_labyrinths(vector<field>& labyrinths)
     labTruefunoff(labyrinths);
     //lab_uspenskaya(labyrinths);
     tokarenko_lab_1(labyrinths);
+    lab_dubovenko(labyrinths);
     f_ermolaeva(labyrinths);
     daryina_lab_1(labyrinths);
+	sidorova_lab_1(labyrinths);
+    karpov_lab_1(labyrinths);
+    skorodumov_lab_1(labyrinths);
+    evtukhov_lab(labyrinths);
 }
 
