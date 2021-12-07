@@ -1,6 +1,5 @@
 #include "base.hpp"
 
-
 class right_bot:public pc
 {
 public:
@@ -212,6 +211,75 @@ public:
         }
     }
 };
+
+class dubovenko_righthand_bot:public pc
+{
+private: direction clockwise(direction dir)
+{
+    if(dir==d)
+        return x;
+    if(dir==x)
+        return z;
+    if(dir==z)
+        return a;
+    if(dir==a)
+        return w;
+    if(dir==w)
+        return e;
+    if(dir==e)
+        return d;
+}
+private: direction counterclockwise(direction dir)
+{
+    if(dir==d)
+        return e;
+    if(dir==e)
+        return w;
+    if(dir==w)
+        return a;
+    if(dir==a)
+        return z;
+    if(dir==z)
+        return x;
+    if(dir==x)
+        return d;
+}
+public:
+    dubovenko_righthand_bot(field * p, string n):pc(p, n) {}
+    virtual void ai()
+    {
+        direction face=d;
+        direction hand=clockwise(face);
+        while (can_go(face))
+        {
+           go(face);
+        }
+        while (!won())
+        {
+            /*if(!can_go(face))
+            {
+                face=clockwise(face);
+                hand=clockwise(hand);
+            }*/
+            while ((can_go(face))and(!can_go(hand)))
+            {
+                go(face);
+            }
+            if(can_go(hand))
+            {
+                face=clockwise(face);
+                hand=clockwise(hand);
+            }
+
+            if((!can_go(hand))and(!can_go(face)))
+            {
+                face=counterclockwise(face);
+                hand=counterclockwise(hand);
+            }
+        }
+    }
+};
+
 class skorodumov_right_hand_bot: public pc
 {
 public:
@@ -315,80 +383,17 @@ public:
     }
 };
 
-class skorodumov_right_hand_bot: public pc
-{
-public:
-    skorodumov_right_hand_bot(field * p, string n):pc(p, n) {}
-    direction start_dir()
-    {
-        /*vector<int> dirs(6,0);
-
-        if(can_go(a))dirs[0]=1;
-        if(can_go(w))dirs[1]=1;
-        if(can_go(e))dirs[2]=1;
-        if(can_go(d))dirs[3]=1;
-        if(can_go(x))dirs[4]=1;
-        if(can_go(z))dirs[5]=1;
-        for(int i(0);i<6;i++){if(dirs[i]==1)set_dir=i;break;}*/
-        for (auto i: {direction::a, direction::w, direction::e, direction::d, direction::x, direction::z})
-            if (can_go(i)) return i;
-    }
-    direction hand_d(direction gogo)
-    {direction a;
-        if(gogo==direction::a)a=direction::w;
-        if(gogo==direction::w)a=direction::e;
-        if(gogo==direction::e)a=direction::d;
-        if(gogo==direction::d)a=direction::x;
-        if(gogo==direction::x)a=direction::z;
-        if(gogo==direction::z)a=direction::a;
-        return a;
-    }
-    direction left_d(direction gogo)
-    {
-        direction b;
-        if(gogo==direction::a)b=direction::z;
-        if(gogo==direction::w)b=direction::a;
-        if(gogo==direction::e)b=direction::w;
-        if(gogo==direction::d)b=direction::e;
-        if(gogo==direction::x)b=direction::d;
-        if(gogo==direction::z)b=direction::x;
-        return b;
-    }
-    virtual void ai()
-    {
-
-        direction gogo = start_dir();
-        direction left = left_d(gogo);
-        direction hand = hand_d(gogo);
-        while (can_go(gogo)) go(gogo);
-        while(!won()){
-            while(!can_go(gogo) and !can_go(hand)){gogo=left; hand=hand_d(gogo); left=left_d(gogo);}
-            while(can_go(hand)){gogo=hand; hand=hand_d(gogo); left=left_d(gogo);}
-            while(can_go(gogo) and !can_go(hand)) go(gogo);
-        }
-
-    }
-};
-
 void fill_bots(vector<pc*> & bots)
 {
 
-    bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
-   
-    //bots.push_back(new sidorova_right_hand_bot(NULL, "<3"));
-//bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
-
+    //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));
-	//bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
-
-
-    //bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
-  
-
+    bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
     //bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
+    //bots.push_back(new sidorova_right_hand_bot(NULL, "<3"));
+    //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
     // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
    // bots.push_back(new turovceva_bot(NULL, "1"));
-
 }
 
