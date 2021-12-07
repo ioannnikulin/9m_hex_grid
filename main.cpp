@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 int main()
 {
     vector<field> labyrinths;
