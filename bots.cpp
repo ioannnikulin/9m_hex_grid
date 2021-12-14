@@ -1,4 +1,5 @@
 #include "base.hpp"
+#include "jenya705.hpp"
 
 class right_bot:public pc
 {
@@ -386,10 +387,10 @@ public:
 void fill_bots(vector<pc*> & bots)
 {
 
-    //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
+    bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));
-    bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
+    //bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
     //bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
     //bots.push_back(new sidorova_right_hand_bot(NULL, "<3"));
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));

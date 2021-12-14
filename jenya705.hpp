@@ -8,6 +8,7 @@
 #include <future>
 #include <mutex>
 #include <array>
+#include <cmath>
 #include "safe.hpp"
 
 using namespace std;
@@ -149,17 +150,18 @@ namespace jenya705 {
 
     };
 
+    template <typename T>
     class VirtualField {
     private:
-        vector<vector<char>> field;
+        vector<vector<T>> field;
     public:
-        VirtualField(): field(vector<vector<char>>(DEFAULT_WIDTH, vector<char>(DEFAULT_WIDTH, UNKNOWN))) {}
+        VirtualField(): field(vector<vector<T>>(DEFAULT_WIDTH, vector<T>(DEFAULT_WIDTH, UNKNOWN))) {}
 
         void moreField(int need) {
             if (need <= 0) return;
             int currentWidth = field.size();
             int newWidth = currentWidth + DEFAULT_WIDTH * (need / DEFAULT_WIDTH + 1);
-            vector<vector<char>> newField(newWidth, vector<char>(newWidth, UNKNOWN));
+            vector<vector<T>> newField(newWidth, vector<T>(newWidth, UNKNOWN));
             newField.insert(newField.begin() + DEFAULT_WIDTH / 2, field.begin(), field.end());
             field = newField;
         }
@@ -172,16 +174,33 @@ namespace jenya705 {
             return {p.x + deltaField(), p.y + deltaField()};
         }
 
-        void set(Point point, char c) {
+        void set(Point point, T c) {
             Point onField = fieldPoint(point);
             moreField(onField.x - field.size());
             field[onField.y][onField.x] = c;
         }
 
-        char at(Point point) {
+        T at(Point point) {
             Point onField = fieldPoint(point);
             moreField(onField.x - field.size());
             return field[onField.y][onField.x];
+        }
+
+        Point find(function<bool(T, T)> func) {
+            T current = field[0][0];
+            Point currentPosition = {0, 0};
+            Point position = {0, 0};
+            for (vector<T>& column: field) {
+                for (T& row: column) {
+                    if (func(row, current)){
+                        current = row;
+                        currentPosition = position;
+                    }
+                    position.x++;
+                }
+                position.y++;
+            }
+            return currentPosition;
         }
 
         void printAt(Point point) {
@@ -210,6 +229,8 @@ namespace jenya705 {
 
     };
 
+    typedef VirtualField<char> DefaultVirtualField;
+
     class Position {
     public:
         Position(Point position): position(position) {}
@@ -226,12 +247,13 @@ namespace jenya705 {
         }
     };
 
+    template <typename T>
     class VirtualMovement {
     private:
-        VirtualField* virtualField;
+        VirtualField<T>* virtualField;
     public:
         Position position;
-        VirtualMovement(VirtualField* field, Position position): virtualField(field), position(position) {}
+        VirtualMovement(VirtualField<T>* field, Position position): virtualField(field), position(position) {}
 
         char move(direction dir) {
             Position positionCopy = position.copy();
@@ -246,15 +268,17 @@ namespace jenya705 {
             return VirtualMovement(virtualField, position.copy());
         }
 
-        VirtualField* getVirtualField() {
+        VirtualField<T>* getVirtualField() {
             return virtualField;
         }
 
     };
 
-    vector<direction> getNodeAllDirections(VirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestMono);
+    typedef VirtualMovement<char> DefaultVirtualMovement;
 
-    vector<direction> getNode(VirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestNodeMono, const direction* dirs) {
+    vector<direction> getNodeAllDirections(DefaultVirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestMono);
+
+    vector<direction> getNode(DefaultVirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestNodeMono, const direction* dirs) {
         vector<direction> bestNode;
         int nodeSize = whereWas.size();
         for (int i = 0; ; ++i) {
@@ -270,7 +294,7 @@ namespace jenya705 {
             #if DEBUG == 1
             cout << "moved to: " << dir << " (" << whereWas.size() << ") - " << this_thread::get_id() << endl;
             #endif
-            VirtualMovement movementCopy = movement.copy();
+            DefaultVirtualMovement movementCopy = movement.copy();
             char goingTo = movementCopy.move(dir);
             if (goingTo == AIR) {
                 bool foundDuplicate = false;
@@ -325,11 +349,11 @@ namespace jenya705 {
         return bestNode;
     }
 
-    vector<direction> getNodeAllDirections(VirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestMono) {
+    vector<direction> getNodeAllDirections(DefaultVirtualMovement movement, vector<Point> whereWas, std::shared_ptr<safe::Mono<int>> bestMono) {
         return getNode(movement, whereWas, bestMono, generateAllDirections());
     }
 
-    vector<direction> getNodeStarter(VirtualMovement movement, Point start) {
+    vector<direction> getNodeStarter(DefaultVirtualMovement movement, Point start) {
         #if FUTURE == 1
         vector<pair<std::shared_ptr<safe::ConcurrentMono<vector<direction>>>, thread*>> threads;
         std::shared_ptr<safe::Mono<int>> bestMono(bestPathMono());
@@ -380,10 +404,10 @@ namespace jenya705 {
     class Bot {
     private:
         pc* bot;
-        VirtualField virtualField;
+        DefaultVirtualField virtualField;
         Position position;
     public:
-        Bot(pc* bot) : bot(bot), virtualField(VirtualField()), position(Position({0, 0})) {}
+        Bot(pc* bot) : bot(bot), virtualField(DefaultVirtualField()), position(Position({0, 0})) {}
 
         void ai() {
 
@@ -425,7 +449,7 @@ namespace jenya705 {
             //BestMono<int>* bestMono = bestPathMono();
             //vector<direction> dirs = jenya705::getNodeAllDirections(VirtualMovement(&virtualField, position.copy()), vector<Point>(1, position.position), bestMono);
             //delete bestMono;
-            return getNodeStarter(VirtualMovement(&virtualField, position.copy()), position.position);
+            return getNodeStarter(DefaultVirtualMovement(&virtualField, position.copy()), position.position);
         }
 
     };
@@ -451,6 +475,77 @@ namespace jenya705 {
         }
 
     };
+
+    namespace A {
+
+        inline bool isWall(float n) {
+            return n == -1;
+        }
+
+        inline bool isUnknown(float n) {
+            return n == 0;
+        }
+
+        inline bool canGo(float n) {
+            return n > 0;
+        }
+
+        template <typename T>
+        inline int signum(T val) {
+            return (T(0) < val) - (val < T(0));
+        }
+
+        direction* generateDirections(int x, int y) {
+            int sgnX = signum(x);
+            int sgnY = signum(y);
+            if (sgnY == 0) {
+                if (sgnX == 1) return jenya705::getDirectionNearsArray(d);
+                else return jenya705::getDirectionNearsArray(a);
+            }
+            direction right = (sgnY == 1 ? e : x);
+            direction left = (sgnY == 1 ? w : z);
+            if (sgnX == -1) return jenya705::getDirectionNearsArray(left);
+            return jenya705::getDirectionNearsArray(right);
+        }
+
+        vector<direction> createNodeTo(Point destination, VirtualMovement<float>* virtualMovement) {
+
+        }
+
+        class ABot {
+        private:
+            pc* bot;
+            VirtualField<float> virtualField;
+            Position position;
+        public:
+            ABot(pc* bot): bot(bot), virtualField(), position({0, 0}) {}
+
+            void ai() {
+                cache();
+                while (!bot->won()) {
+                    Point point = virtualField.find([](float a, float b){
+                        return a == -1 ? b : (b == -1 ? a : (a > b ? b : a))
+                    });
+
+                }
+            }
+
+            void cache() {
+                if (virtualField.at(position.position) == 0) {
+                    virtualField.set(position.position, bot->dist_to_exit());
+                }
+                for (direction dir: ALL_DIRECTIONS) {
+                    if (!bot->can_go(dir)) {
+                        Position positionCopy = position.copy();
+                        positionCopy.move(dir);
+                        virtualField.set(position.position, -1);
+                    }
+                }
+            }
+
+        };
+
+    }
 
 };
 
