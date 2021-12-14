@@ -70,6 +70,43 @@ private:
 
 };
 
+class evtukhov_right_hand_bot:public pc{
+public:
+   evtukhov_right_hand_bot(field * p, string n):pc(p, n){}
+   virtual void ai(){
+       direction face=d;
+       direction hand=x;
+       while(can_go(face))go(face);
+       while(!won()){
+           while(can_go(face) && !can_go(hand))go(face);
+           while(can_go(hand)){
+            face = clockwise(face);
+            hand = clockwise(hand);
+           }
+           while(!can_go(face) and !can_go(hand)){
+            face = counter_clockwise(face);
+            hand = counter_clockwise(hand);
+           }
+       }
+   }
+private:
+    direction clockwise(direction p){
+        if (p==a) return w;
+        if (p==w) return e;
+        if (p==e) return d;
+        if (p==d) return x;
+        if (p==x) return z;
+        if (p==z) return a;
+    }
+    direction counter_clockwise(direction p){
+        if (p==a) return z;
+        if (p==w) return a;
+        if (p==e) return w;
+        if (p==d) return e;
+        if (p==x) return d;
+        if (p==z) return x;
+    }
+};
 
 
 
