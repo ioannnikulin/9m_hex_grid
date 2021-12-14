@@ -212,6 +212,58 @@ public:
     }
 };
 
+class a_star_bot:public pc
+{
+
+public:
+    a_star_bot(field * p, string n):pc(p, n) {}
+    virtual void ai()
+    {
+using std::pair;
+        int wall(999);
+        int fog(9999);
+        vector<vector<int>> field_model(50,vector<int>(50,9999));
+        float cur_dist=dist_to_exit();
+        field_model[row][col]=cur_dist;
+        direction choice=w;
+        pair<int, int> choice_coord({-1,-1});
+        choice_coord.first = row+delta(w).first;
+        choice_coord.second = col+delta(w).second;
+        for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
+        {
+            pair<int, int> deltas=delta(i);
+            if (!can_go(i)) field_model[row+deltas.first][col+deltas.second]=wall;
+            else
+            {
+                go(i);
+                field_model[row+deltas.first][col+deltas.second]=dist_to_exit();
+                if(field_model[row+deltas.first][col+deltas.second]<field_model[choice_coord.first][choice_coord.second])
+                {
+                    choice=i;
+                    choice_coord.first = row+delta(i).first;
+                    choice_coord.second = col+delta(i).second;
+                }
+                go(&&-1&&)
+                //TODO
+            }
+        }
+        go(choice);
+    }
+private:
+    std::pair<int, int> delta(direction dir)
+    {
+        if(direction==w) return (-1,-row%2);
+        if(direction==e) return (-1,-row%2);
+        if(direction==d) return (-1,-row%2);
+        if(direction==x) return (-1,-row%2);
+        if(direction==z) return (-1,-row%2);
+        if(direction==a) return (-1,-row%2);
+    }
+    //TODO
+    int row=25, col=25;
+};
+
+
 class dubovenko_righthand_bot:public pc
 {
 private: direction clockwise(direction dir)
