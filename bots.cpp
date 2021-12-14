@@ -1,4 +1,5 @@
 #include "base.hpp"
+#include <ctime>
 
 class right_bot:public pc
 {
@@ -383,13 +384,104 @@ public:
     }
 };
 
+class taya_right_hand_bot:public pc
+{
+private:
+
+
+    int rand_step (void)
+    {
+
+        int h = rand()%2;
+        return h;
+    }
+
+    direction clockwise(direction dire)
+    {
+        switch (dire)
+        {
+            case d: return x;
+            case x: return z;
+            case z: return a;
+            case a: return w;
+            case w: return e;
+            case e: return d;
+        }
+
+    }
+
+    direction counterclockwise(direction dire)
+    {
+        switch (dire)
+        {
+            case d: return e;
+            case e: return w;
+            case w: return a;
+            case a: return z;
+            case z: return x;
+            case x: return d;
+        }
+    }
+public:
+    taya_right_hand_bot(field * p, string n):pc(p, n) {}
+    virtual void ai()
+    {
+        const int rand_per=30;
+        int g(0);
+        int rand_counter=rand_per;
+        direction face = d;
+        direction hand = x;
+        srand(time(0));
+
+        while (can_go(face))
+            {
+                go(face);
+                g++;
+            }
+
+        while (!won())
+        {
+            if (rand_counter>0) {rand_counter--;}
+            else if (rand_counter==0)
+                {
+                    rand_counter=rand_per;
+                    if (rand_step()==0) {hand = clockwise(hand); face = clockwise(face);}
+                    else {hand = counterclockwise(hand); face = counterclockwise(hand);}
+                }
+
+
+            if (can_go(d) and
+                can_go(x) and
+                can_go(z) and
+                can_go(a) and
+                can_go(w) and
+                can_go(e))
+                {
+                    go(face);
+                }
+            else
+            {
+                if (can_go(face) and !can_go(hand))
+                    {
+                        go(face);
+                    }
+                else if (can_go(hand)) {hand = clockwise(hand); face = clockwise(face);}
+                else if (!can_go(face)) {hand = counterclockwise(hand); face = counterclockwise(hand);}
+            }
+
+
+            g++;
+        }
+    }
+};
+
 void fill_bots(vector<pc*> & bots)
 {
 
     //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));
-    bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
+    bots.push_back(new taya_right_hand_bot(NULL, "^"));
     //bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
     //bots.push_back(new sidorova_right_hand_bot(NULL, "<3"));
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
