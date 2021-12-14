@@ -335,6 +335,50 @@ public:
     }
 };
 
+class evtukhov_a_star: public pc{
+public:
+    evtukhov_a_star(field * p, string n):pc(p, n){}
+    virtual void ai(){
+        int wall(999);
+        int fog(9999);
+        vector<vector<int>> field_model(50, vector<int> (50, fog));
+        float cur_dist = dist_to_exit();
+        field_mode[row][col] = cur_dist;
+        direction choice = w;
+        pair<int,int> choice_coord ({-1,-1});
+        choice_coord.first = row + delta(w).first;
+        choice_coord.second = col + delta(w).second;
+        for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a}){
+            pair <int, int> deltas = delta(i);
+            if(!can_go(i) field_model[row+deltas.first][col+deltas.second] =  wall;
+            else{
+                go(i);
+                field_model[row+deltas.first][col+deltas.second] = dist_to_exit();
+                if(field_model[row+deltas.first][col+deltas.second] < field_model[choice_coord.first][choice_coord.second]){
+                    choice = i;
+                    choice_coord.first = row + delta(w).first;
+                    choice_coord.second = col + delta(w).second;
+                }
+                go(counter_trend(i));
+            }
+        }
+        go(choice);
+    }
+private:
+    int row(25), col(25);
+    pair <int, int> delta(direction dir){
+        if(dir == w) return (-1,-row%2);
+    }
+    direction counter_trend(direction dir){
+        if (dir == w) return x;
+        if (dir == e) return z;
+        if (dir == d) return a;
+        if (dir == x) return w;
+        if (dir == z) return e;
+        if (dir == a) return d;
+    }
+};
+
 class turovceva_bot: public pc
 {
 public:
@@ -389,11 +433,12 @@ void fill_bots(vector<pc*> & bots)
     //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));
-    bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
+    //bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
     //bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
     //bots.push_back(new sidorova_right_hand_bot(NULL, "<3"));
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
     // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
    // bots.push_back(new turovceva_bot(NULL, "1"));
+   bots.push_back(new evtukhov_a_star(NULL, "$"));
 }
 
