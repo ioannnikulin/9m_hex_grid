@@ -405,20 +405,12 @@ public:
     skorodumov_right_hand_bot(field * p, string n):pc(p, n) {}
     direction start_dir()
     {
-        /*vector<int> dirs(6,0);
-
-        if(can_go(a))dirs[0]=1;
-        if(can_go(w))dirs[1]=1;
-        if(can_go(e))dirs[2]=1;
-        if(can_go(d))dirs[3]=1;
-        if(can_go(x))dirs[4]=1;
-        if(can_go(z))dirs[5]=1;
-        for(int i(0);i<6;i++){if(dirs[i]==1)set_dir=i;break;}*/
         for (auto i: {direction::a, direction::w, direction::e, direction::d, direction::x, direction::z})
             if (can_go(i)) return i;
     }
     direction hand_d(direction gogo)
-    {direction a;
+    {
+        direction a;
         if(gogo==direction::a)a=direction::w;
         if(gogo==direction::w)a=direction::e;
         if(gogo==direction::e)a=direction::d;
@@ -438,9 +430,9 @@ public:
         if(gogo==direction::z)b=direction::x;
         return b;
     }
+
     virtual void ai()
     {
-
         direction gogo = start_dir();
         direction left = left_d(gogo);
         direction hand = hand_d(gogo);
@@ -454,6 +446,7 @@ public:
     }
 };
 
+<<<<<<< Updated upstream
 class turovceva_bot: public pc
 {
 public:
@@ -517,5 +510,56 @@ void fill_bots(vector<pc*> & bots)
     // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
    // bots.push_back(new turovceva_bot(NULL, "1"));
 
+=======
+class skorodumov_star_bot: public pc
+{
+public:
+    skorodumov_star_bot(field * p, string n):pc(p, n){}
+    virtual void ai()
+    {
+        int wall(999);
+        int fog(9999);
+        vector<vector<float>> field_model(50, fog);
+
+        float cur_dist = dist_to_exit();
+        field model[row][col] = cur_dist;
+        direction choice = w;
+        pair<int,int> choice_coord({-1,-1});
+        choice_coord.first = row + delta(w).first;
+        choice_coord.second = col + delta(w).second;
+        for(auto i:{direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
+            {
+                pair<int,int> deltas = delta(i);
+                if(!can_go(i))field_model[row+deltas.first][col+deltas.second] = wall;
+                else
+                {
+                    go(i);
+                    field_model[row+deltas,first][col+deltas.second] = dist_to_exit();
+                    if(field_model[row+deltas,first][col+deltas.second] < field_model[choice_coord.second])
+                    {
+                        choice = i;
+                        choice_coord.first = row + delta(i).first;
+                        choice_coord.second = col + delta(i).second;
+                    }
+                    go(??-i??);///TODO
+                }
+            }
+            go(choice);
+    }
+private:
+    int row = 25; int col = 25;
+    pair<int,int> delta(direction dir)
+    {
+        if(dir==w) return(-1, -row%2);
+        ///TODO
+    }
+};
+void fill_bots(vector<pc*> & bots)
+{
+    //bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
+    //bots.push_back(new right_bot(NULL, ">"));
+    //bots.push_back(new panic_bot(NULL, "?"));
+    //bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
+>>>>>>> Stashed changes
 }
 
