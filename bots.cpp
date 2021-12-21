@@ -337,27 +337,27 @@ public:
 
 class evtukhov_a_star: public pc{
 public:
-    evtukhov_a_star(field * p, string n):pc(p, n){}
+    evtukhov_a_star(field * p, string n):pc(p, n), row(25), col(25){}
     virtual void ai(){
         int wall(999);
         int fog(9999);
         vector<vector<int>> field_model(50, vector<int> (50, fog));
         float cur_dist = dist_to_exit();
-        field_mode[row][col] = cur_dist;
+        field_model[row][col] = cur_dist;
         direction choice = w;
         pair<int,int> choice_coord ({-1,-1});
         choice_coord.first = row + delta(w).first;
         choice_coord.second = col + delta(w).second;
         for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a}){
             pair <int, int> deltas = delta(i);
-            if(!can_go(i) field_model[row+deltas.first][col+deltas.second] =  wall;
+            if(!can_go(i)) field_model[row+deltas.first][col+deltas.second] =  wall;
             else{
                 go(i);
                 field_model[row+deltas.first][col+deltas.second] = dist_to_exit();
                 if(field_model[row+deltas.first][col+deltas.second] < field_model[choice_coord.first][choice_coord.second]){
                     choice = i;
-                    choice_coord.first = row + delta(w).first;
-                    choice_coord.second = col + delta(w).second;
+                    choice_coord.first = row + delta(i).first;
+                    choice_coord.second = col + delta(i).second;
                 }
                 go(counter_trend(i));
             }
@@ -365,9 +365,15 @@ public:
         go(choice);
     }
 private:
-    int row(25), col(25);
+    int row;
+    int col;
     pair <int, int> delta(direction dir){
-        if(dir == w) return (-1,-row%2);
+        if(dir == w) return {-1,-row%2};
+        if(dir == e) return {-1,1-row%2};
+        if(dir == d) return {0,1};
+        if(dir == x) return {1,row%2};
+        if(dir == z) return {1,row%2-1};
+        if(dir == a) return {0,-1};
     }
     direction counter_trend(direction dir){
         if (dir == w) return x;

@@ -15,6 +15,7 @@ using std::cout;
 using std::clog;
 using std::vector;
 using std::endl;
+using std::pair;
 class field;
 
 class cell
