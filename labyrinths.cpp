@@ -1,4 +1,5 @@
 #include "base.hpp"
+#include "verybiglab.hpp"
 void f0(vector<field>& labyrinths)
 {
     labyrinths.push_back(field(5,6));
@@ -1732,7 +1733,6 @@ labyrinths[p].set_start_col(0);
 void fill_labyrinths(vector<field>& labyrinths)
 {
 
-
     f_Art(labyrinths);
     ushenin_lab_1(labyrinths);
     labTruefunoff(labyrinths);
@@ -1744,6 +1744,8 @@ void fill_labyrinths(vector<field>& labyrinths)
 	sidorova_lab_1(labyrinths);
     karpov_lab_1(labyrinths);
     skorodumov_lab_1(labyrinths);
+    very_big_lab(labyrinths);
     evtukhov_lab(labyrinths);
+
 }
 

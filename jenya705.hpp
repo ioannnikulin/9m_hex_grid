@@ -121,7 +121,6 @@ namespace jenya705 {
         return {0, 0};
     }
 
-
     template <typename T>
     class VirtualField {
     private:
@@ -154,17 +153,31 @@ namespace jenya705 {
 
         T at(Point point) {
             Point onField = fieldPoint(point);
-            moreField(onField.x - field.size());
+            moreField(max(onField.x, onField.y) - field.size());
+            onField = fieldPoint(point);
             return field[onField.y][onField.x];
         }
 
-        Point find(function<bool(T, T)> func) {
+        Point& find(function<bool(T&, T&)> func) {
+            return findPositionable([&](Point p1, float& v1, Point p2, float& v2) {
+                return func(v1, v2);
+            });
+        }
+
+        Point realPoint(Point point) {
+            return {
+                point.x - deltaField(),
+                point.y - deltaField()
+            };
+        }
+
+        Point findPositionable(function<bool(Point, T&, Point, T&)> func) {
             T current = field[0][0];
             Point currentPosition = {0, 0};
             Point position = {0, 0};
             for (vector<T>& column: field) {
-                for (T& row: column) {
-                    if (func(row, current)){
+                for (T row: column) {
+                    if (func(realPoint(position), row, realPoint(currentPosition), current)){
                         current = row;
                         currentPosition = position;
                     }
@@ -562,8 +575,11 @@ namespace jenya705 {
                     Point point;
                     direction thisPointDir;
                     while (true) {
-                        point = virtualField.find([](float a, float b){
-                            return b <= 0 || (a > 0 && a < b);
+                        point = virtualField.findPositionable([&](Point ap, float& a, Point bp, float& b){
+                            if (a <= 0) return false;
+                            a += abs(position.position.x - ap.x) + abs(position.position.y - ap.y);
+                            if (virtualField.at(bp) <= 0) return true;
+                            return a < b;
                         });
                         VirtualMovement<float> pointVirtualMovement(&virtualField, point, canGo);
                         thisPointDir = onCircleDirection(&pointVirtualMovement);
