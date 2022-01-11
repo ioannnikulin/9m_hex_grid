@@ -1732,7 +1732,7 @@ labyrinths[p].set_start_col(0);
 
 void fill_labyrinths(vector<field>& labyrinths)
 {
-
+/*
     f_Art(labyrinths);
     ushenin_lab_1(labyrinths);
     labTruefunoff(labyrinths);
@@ -1746,6 +1746,8 @@ void fill_labyrinths(vector<field>& labyrinths)
     skorodumov_lab_1(labyrinths);
     very_big_lab(labyrinths);
     evtukhov_lab(labyrinths);
-
+    f0(labyrinths);
+*/
+    skorodumov_lab_1(labyrinths);
 }
 

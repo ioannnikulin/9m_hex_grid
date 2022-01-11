@@ -2,6 +2,9 @@
 #include <chrono>
 #include <algorithm>
 #include <thread>
+///change settings here
+int wait_time = 100;
+int fuel_coefficient = 5;
 
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
 {
@@ -75,13 +78,16 @@ bool pc::won()
 {
     return (dist_to_exit() < 2);
 }
-
-
-int interact(pc * src, cell * tgt, field * f)
+template<>
+int field::interact(pc * src, cell * tgt)
 {
     if (tgt->is_walkable())
     {
-        f->swap(src, tgt);
+        int x(tgt->col), y(tgt->row);
+        int xs(src->col), ys(src->row);
+        delete tgt;
+        set_cell(y,x,src);
+        set_cell(ys,xs,new space(this));
         return 0;
     }
     return -1;
@@ -160,11 +166,13 @@ void field::go(pc * p, direction dir)
     if (tgt!=NULL)
     {
         //clog << "go to " << tgt->row << ":" << tgt->col << endl;
-        if (interact(p, tgt, this) == 0)
+        if (interact(p, tgt) == 0)
         #if MODE == SHOW
+        {
             system("cls");
             show();//if interact successful, smth changed
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(wait_time));
+        }
         #else
             ;
         #endif
@@ -178,7 +186,7 @@ void field::go(pc * p, direction dir)
 void field::place_player(pc * bot)
 {
     set_cell(start_row, start_col, bot);
-    ttl = (width()*height())*5;//TODO
+    ttl = (width()*height())*fuel_coefficient;
     steps = 0;
     passed = false;
 }

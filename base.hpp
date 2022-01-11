@@ -15,6 +15,7 @@ using std::cout;
 using std::clog;
 using std::vector;
 using std::endl;
+using std::pair;
 class field;
 
 class cell
@@ -24,7 +25,7 @@ class cell
 public:
     cell(field * p):col(-1),row(-1),parent(p) {}
     virtual string str() = 0;
-    virtual bool is_walkable() = 0;
+    virtual bool is_walkable() {return false;}
     virtual bool is_victory() =0;
     virtual bool is_player() =0;
     int get_col() {return col;}
@@ -116,6 +117,7 @@ public:
     void set_start_col(int c) {start_col = c;}
     void place_player(pc * bot);
     int get_steps() {return steps;}
+
 private:
     vector<vector<cell*>> cells;
     cell * look(cell * p, direction dir);
@@ -123,10 +125,11 @@ private:
     int steps;
     int ttl;
     bool passed = false;
+
+    template <class T1, class T2>
+    int interact(T1 * src, T2 * tgt);
 };
 
-template <class T1, class T2>
-int interact(T1 * src, T2 * tgt, field * f);
 
 
 void fill_labyrinths(vector<field> & labyrinths);
