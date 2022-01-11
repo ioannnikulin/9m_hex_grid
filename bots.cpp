@@ -48,7 +48,8 @@ public:
         for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
         {
             pair<int,int> deltas = delta(i);
-            if (!can_go(i)) field_model[row + deltas.first][col + deltas.second] = wall;
+            if (!can_go(i))
+                field_model[row + deltas.first][col + deltas.second] = wall;
             else
             {
                 go (i);
@@ -69,12 +70,12 @@ private:
     int col=25;
     pair <int, int> delta(direction dir)
     {
-        if (dir == w ) return {-1, -row%2};
-        if (dir == e ) return {-1, 1-row%2};
-        if (dir == d ) return {0, +1};
-        if (dir == x ) return {+1, row%2};
-        if (dir == z ) return {+1, row%2+1};
-        if (dir == a ) return {0, -1};
+        if (dir == w) return {-1, -row%2};
+        if (dir == e) return {-1, (row+1)%2};
+        if (dir == d) return {0, +1};
+        if (dir == x) return {+1, (row+1)%2};
+        if (dir == z) return {+1, row%2+1};
+        if (dir == a) return {0, -1};
 
     }
     direction backwards(direction dir)
@@ -88,6 +89,7 @@ private:
 
 
     }
+
 };
 
 

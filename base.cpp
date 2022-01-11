@@ -161,9 +161,11 @@ void field::go(pc * p, direction dir)
         //clog << "go to " << tgt->row << ":" << tgt->col << endl;
         if (interact(p, tgt, this) == 0)
         #if MODE == SHOW
+        {
             system("cls");
             show();//if interact successful, smth changed
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
         #else
             ;
         #endif

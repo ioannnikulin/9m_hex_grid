@@ -11,6 +11,7 @@
 
 
 using std::string;
+using std::pair;
 using std::cout;
 using std::clog;
 using std::vector;
