@@ -382,18 +382,108 @@ public:
        }
     }
 };
+class karpov_star_bot:public pc
+{
+public:
+    karpov_star_bot(field * p, string n):pc(p, n) {}
 
+    virtual void ai()
+    {
+        int wall(88);
+        int fog(99);
+            vector<vector<float> > map1(21,vector<float>(21,fog));
+            vector<pair<int,int> > vozm;
+
+    int x(10),y(10);
+        while(!won()){
+            direction ld=w;
+            float dist=dist_to_exit();
+        for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
+        {
+            if(can_go(i) and map1[dy(i,y)][dx(i,x,y)]==fog){
+                go(i);
+                map1[dy(i,y)][dx(i,x,y)]=dist_to_exit();
+                vozm.push_back({dy(i,y),dx(i,x,y)});
+            if(dist_to_exit()<dist){
+                    ld=i;
+                    dist=dist_to_exit();
+                }
+                go(raz(i));
+            }
+            if(!can_go(i)){
+            map1[dy(i,y)][dx(i,x,y)]=wall;
+            }
+            show(map1,x,y);
+
+        }
+        y=dy(ld,y);
+        x=dx(ld,x,y);
+        go(ld);
+
+        }
+    }
+private:
+void show(vector<vector<float>> a, int x, int y){
+for(int i=0;i<a.size();i++){
+    for(int j=0;j<a[0].size();j++){
+        char s=' ';
+        if (i==y and j==x) s = '*';
+        else if(a[i][j]==99){s='F';}
+        else if(a[i][j]==88){s='W';}
+        if(i%2==1){cout<<s<<' ';}
+        else{cout<<' '<<s;}
+    }
+    cout<<endl;
+}
+}
+int dx(direction p,int x1,int y){
+        if (p==d) return x1+1;
+        if (p==a) return x1-1;
+        if(y%2==0){
+        if (p==x or p==e) return x1+1;
+        if (p==z or p==w) return x1;
+        }
+        if(y%2==1){
+        if (p==x or p==e) return x1;
+        if (p==z or p==w) return x1-1;
+        }
+}
+int dy(direction p,int y){
+if(p==w or p==e) return y-1;
+if(p==a or p==d) return y;
+if(p==z or p==x) return y+1;
+}
+direction cw(direction p)
+    {
+        if (p==d) return x;
+        if (p==x) return z;
+        if (p==z) return a;
+        if (p==a) return w;
+        if (p==w) return e;
+        if (p==e) return d;
+    }
+direction raz(direction p)
+    {
+        if (p==d) return a;
+        if (p==x) return w;
+        if (p==z) return e;
+        if (p==a) return d;
+        if (p==w) return x;
+        if (p==e) return z;
+    }
+};
 void fill_bots(vector<pc*> & bots)
 {
 
     //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));
-    bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
+    //bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
     //bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
     //bots.push_back(new sidorova_right_hand_bot(NULL, "<3"));
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
     // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
    // bots.push_back(new turovceva_bot(NULL, "1"));
+    bots.push_back(new karpov_star_bot(NULL, "K"));
 }
 
