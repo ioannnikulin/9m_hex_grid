@@ -3,7 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-
+#include <chrono>
+#include <thread>
 
 #define SHOW 1
 #define BENCHMARK 2
@@ -16,6 +17,7 @@ using std::clog;
 using std::vector;
 using std::endl;
 class field;
+using std::pair;
 
 class cell
 {

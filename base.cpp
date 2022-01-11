@@ -1,6 +1,5 @@
 #include "base.hpp"
-#include <chrono>
-#include <thread>
+
 
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
 {
@@ -158,12 +157,15 @@ void field::go(pc * p, direction dir)
     cell * tgt = look(p, dir);
     if (tgt!=NULL)
     {
+
         //clog << "go to " << tgt->row << ":" << tgt->col << endl;
         if (interact(p, tgt, this) == 0)
         #if MODE == SHOW
+        {
             system("cls");
             show();//if interact successful, smth changed
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
         #else
             ;
         #endif

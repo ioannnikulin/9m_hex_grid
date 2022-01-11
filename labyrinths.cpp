@@ -1725,25 +1725,24 @@ labyrinths[p].set_cell(18,4,new wall(NULL));
 labyrinths[p].set_cell(18,15,new wall(NULL));
 labyrinths[p].set_cell(19,4,new wall(NULL));
 labyrinths[p].set_cell(19,15,new wall(NULL));
-labyrinths[p].set_start_row(19);
-labyrinths[p].set_start_col(0);
+labyrinths[p].set_start_row(16);
+labyrinths[p].set_start_col(4);
 }
 
 void fill_labyrinths(vector<field>& labyrinths)
 {
 
 
-    f_Art(labyrinths);
-    ushenin_lab_1(labyrinths);
-    labTruefunoff(labyrinths);
+    //f_Art(labyrinths);
+    //ushenin_lab_1(labyrinths);
+    //labTruefunoff(labyrinths);
     //lab_uspenskaya(labyrinths);
-    tokarenko_lab_1(labyrinths);
-    lab_dubovenko(labyrinths);
-    f_ermolaeva(labyrinths);
-    daryina_lab_1(labyrinths);
-	sidorova_lab_1(labyrinths);
-    karpov_lab_1(labyrinths);
+    //tokarenko_lab_1(labyrinths);
+    //lab_dubovenko(labyrinths);
+    //f_ermolaeva(labyrinths);
+    //daryina_lab_1(labyrinths);
+	//sidorova_lab_1(labyrinths);
+   // karpov_lab_1(labyrinths);
     skorodumov_lab_1(labyrinths);
-    evtukhov_lab(labyrinths);
 }
 

@@ -1,4 +1,7 @@
 #include "base.hpp"
+#include <conio.h>
+#include <fstream>
+#include <iomanip>
 
 class right_bot:public pc
 {
@@ -446,7 +449,7 @@ public:
     }
 };
 
-<<<<<<< Updated upstream
+
 class turovceva_bot: public pc
 {
 public:
@@ -495,11 +498,106 @@ public:
     }
 };
 
+class skorodumov_star_bot: public pc
+{
+public:
+    skorodumov_star_bot(field * p, string n):pc(p, n){}
+    direction negative_dir(direction dirr){
+    if(dirr==w)
+        return x;
+    if(dirr==e)
+        return z;
+    if(dirr==d)
+        return a;
+    if(dirr==x)
+        return w;
+    if(dirr==z)
+        return e;
+    if(dirr==a)
+        return d;
+    }
+    virtual void ai()
+    {
+        int iwall(999);
+        int fog(9999);
+        field_model=vector<vector<float>>(50, vector<float> (50, fog));
+
+        float cur_dist = dist_to_exit();
+        field_model[row][col] = cur_dist;
+        direction choice = w;
+        pair<int,int> choice_coord({-1,-1});
+        choice_coord.first = row + delta(w).first;
+        choice_coord.second = col + delta(w).second;
+        int t(5);
+        while(t--)//(dist_to_exit()>1)
+            {
+        for(auto i:{direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
+            {
+                pair<int,int> deltas = delta(i);
+                if(!can_go(i) and field_model[row+deltas.first][col+deltas.second] == fog)
+                    field_model[row+deltas.first][col+deltas.second] = iwall;
+                else if(field_model[row+deltas.first][col+deltas.second]==fog)
+                {direction dirr=i;
+                    go(i);
+                    field_model[row+deltas.first][col+deltas.second] = dist_to_exit();
+
+                    direction ndir = negative_dir(dirr);
+                    go(ndir);
+                } if(field_model[row+deltas.first][col+deltas.second]!=iwall and field_model[row+deltas.first][col+deltas.second]!=fog and field_model[row+deltas.first][col+deltas.second] < field_model[choice_coord.first][choice_coord.second])
+                    {
+                        choice = i;
+                        choice_coord.first = row + delta(i).first;
+                        choice_coord.second = col + delta(i).second;
+                    }
+                    print_model();
+            }
+            look_around();
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            getch();
+            go(choice);
+
+    }}
+private:
+    int row = 25; int col = 25;
+    vector<vector<float>> field_model;
+    pair<int,int> delta(direction dir)
+    {
+        if(dir==w)return{-1, -row%2};
+        if(dir==e)return{-1, 1-row%2};
+        if(dir==d)return{0, 1};
+        if(dir==a)return{0, -1};
+        if(dir==x)return{1, 1-row%2};
+        if(dir==z)return{1, -row%2};
+    }
+
+    void print_model()
+    {
+        std::ofstream fs("data.txt", std::ios_base::app);
+        for (size_t i(0); i<field_model.size(); i++)
+        {
+            if (i%2 == 0) fs << std::setw(6) << " ";
+            for (auto j: field_model[i])
+                fs << std::setw(6) << j << " ";
+            fs << endl;
+        }
+        fs << endl << std::flush;
+        fs.close();
+    }
+    void look_around()
+    {
+        cout << " " << field_model[row+delta(w).first][col+delta(w).second]<< " ";
+        cout << field_model[row+delta(e).first][col+delta(e).second]<< endl;
+        cout << field_model[row+delta(a).first][col+delta(a).second]<< " ";
+        cout << field_model[row][col]<< " ";
+        cout << field_model[row+delta(d).first][col+delta(d).second]<< endl;
+        cout << " " << field_model[row+delta(z).first][col+delta(z).second]<< " ";
+        cout << field_model[row+delta(x).first][col+delta(x).second]<< " ";
+    }
+};
 void fill_bots(vector<pc*> & bots)
 {
 
-    bots.push_back(new truefunoff_right_hand_bot(NULL, "%"));
-
+    //bots.push_back(new truefunoff_right_hand_bot(NULL, "%"));
     //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));
@@ -509,57 +607,6 @@ void fill_bots(vector<pc*> & bots)
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
     // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
    // bots.push_back(new turovceva_bot(NULL, "1"));
-
-=======
-class skorodumov_star_bot: public pc
-{
-public:
-    skorodumov_star_bot(field * p, string n):pc(p, n){}
-    virtual void ai()
-    {
-        int wall(999);
-        int fog(9999);
-        vector<vector<float>> field_model(50, fog);
-
-        float cur_dist = dist_to_exit();
-        field model[row][col] = cur_dist;
-        direction choice = w;
-        pair<int,int> choice_coord({-1,-1});
-        choice_coord.first = row + delta(w).first;
-        choice_coord.second = col + delta(w).second;
-        for(auto i:{direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
-            {
-                pair<int,int> deltas = delta(i);
-                if(!can_go(i))field_model[row+deltas.first][col+deltas.second] = wall;
-                else
-                {
-                    go(i);
-                    field_model[row+deltas,first][col+deltas.second] = dist_to_exit();
-                    if(field_model[row+deltas,first][col+deltas.second] < field_model[choice_coord.second])
-                    {
-                        choice = i;
-                        choice_coord.first = row + delta(i).first;
-                        choice_coord.second = col + delta(i).second;
-                    }
-                    go(??-i??);///TODO
-                }
-            }
-            go(choice);
-    }
-private:
-    int row = 25; int col = 25;
-    pair<int,int> delta(direction dir)
-    {
-        if(dir==w) return(-1, -row%2);
-        ///TODO
-    }
-};
-void fill_bots(vector<pc*> & bots)
-{
-    //bots.push_back(new skorodumov_right_hand_bot(NULL, "@"));
-    //bots.push_back(new right_bot(NULL, ">"));
-    //bots.push_back(new panic_bot(NULL, "?"));
-    //bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
->>>>>>> Stashed changes
+   bots.push_back(new skorodumov_star_bot(NULL, "1"));
 }
 
