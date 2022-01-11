@@ -161,9 +161,11 @@ void field::go(pc * p, direction dir)
         //clog << "go to " << tgt->row << ":" << tgt->col << endl;
         if (interact(p, tgt, this) == 0)
         #if MODE == SHOW
+        {
             system("cls");
             show();//if interact successful, smth changed
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
         #else
             ;
         #endif
@@ -177,7 +179,7 @@ void field::go(pc * p, direction dir)
 void field::place_player(pc * bot)
 {
     set_cell(start_row, start_col, bot);
-    ttl = (width()*height())*5;//TODO
+    ttl = (width()*height())*25;//TODO
     steps = 0;
     passed = false;
 }

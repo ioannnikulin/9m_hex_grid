@@ -235,17 +235,71 @@ direction counter_clockwise(direction q)
 
 
 
-class panic_bot:public pc
+class star_bot:public pc
 {
 public:
-    panic_bot(field * p, string n):pc(p, n) {}
+    star_bot(field * p, string n):pc(p, n) {}
     virtual void ai()
     {
-        while (!won())
+        int wall(999);
+        int fog(9999);
+        vector<vector<float>> field_model(50, vector<float> (50, fog));
+
+        float cur_dist = dist_to_exit();
+        field_model[row][col] = cur_dist;
+        direction choice = w;
+        std::pair<int, int> choise_coord({-1,-1});
+        choise_coord.first = row + delta(w).first;
+        choise_coord.second = col + delta(w).second;
         for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
         {
-            go(i);
+            std::pair<int, int> deltas = delta(i);
+
+            if(!can_go(i)) field_model[row+deltas.first][col+deltas.second] = wall;
+            else
+            {
+                go(i);
+                field_model[row+deltas.first][col+deltas.second] = dist_to_exit();
+                if(field_model[row+deltas.first][col+deltas.second] < field_model[choise_coord.first][choise_coord.second])
+                {
+                    choice = i;
+                    choise_coord.first = row + delta(i).first;
+                    choise_coord.second = col + delta(i).second;
+                }
+                go(Kryak(i));
+            }
+
         }
+      //  show_surroundings();
+        go(choice);
+    }
+private:
+    vector<vector<float>> field_model;
+
+/*    void show_surroundings()
+{
+    cout << " " << field_model[col-1][row-1] << " " << field_model[col][row-1] << endl;
+    cout << " " << field_model[col-1][row] << " " << field_model[col][row] << " " << field_model[col+1][row] << endl;
+    cout << " " << field_model[col-1][row+1] << " " << field_model[col][row+1] << endl;
+}*/
+    int row = 25,col = 25;
+    std::pair<int, int> delta(direction dir)
+    {
+        if(dir == w) return {-1, -row%2};
+        if(dir == e) return {-1, -row%2+1};
+        if(dir == d) return {0, 1};
+        if(dir == x) return {1, 1-row%2};
+        if(dir == z) return {1, -row%2};
+        if(dir == a) return {0, -1};
+    }
+    direction Kryak(direction dir)
+    {
+        if (dir==w) return x;
+        if (dir==e) return z;
+        if (dir==d) return a;
+        if (dir==x) return w;
+        if (dir==z) return e;
+        if (dir==a) return d;
     }
 };
 class truefunoff_right_hand_bot:public pc
@@ -505,8 +559,8 @@ public:
 void fill_bots(vector<pc*> & bots)
 {
 
-    bots.push_back(new truefunoff_right_hand_bot(NULL, "%"));
-
+    //bots.push_back(new truefunoff_right_hand_bot(NULL, "%"));
+    bots.push_back(new star_bot(NULL, ">"));
     //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));

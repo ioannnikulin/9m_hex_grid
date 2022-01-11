@@ -1734,9 +1734,9 @@ void fill_labyrinths(vector<field>& labyrinths)
 
 
     f_Art(labyrinths);
-    ushenin_lab_1(labyrinths);
+    /*ushenin_lab_1(labyrinths);
     labTruefunoff(labyrinths);
-    //lab_uspenskaya(labyrinths);
+    lab_uspenskaya(labyrinths);
     tokarenko_lab_1(labyrinths);
     lab_dubovenko(labyrinths);
     f_ermolaeva(labyrinths);
@@ -1744,6 +1744,6 @@ void fill_labyrinths(vector<field>& labyrinths)
 	sidorova_lab_1(labyrinths);
     karpov_lab_1(labyrinths);
     skorodumov_lab_1(labyrinths);
-    evtukhov_lab(labyrinths);
+    evtukhov_lab(labyrinths);*/
 }
 
