@@ -92,6 +92,8 @@ class pc: public character
 public:
     pc(field * p, string n):character(p, n) {}
     void go(direction dir);
+    void clockwise(direction dir);
+    void counterclockwise(direction dir);
     bool can_go(direction dir);
     bool won();
     float dist_to_exit();

@@ -144,7 +144,6 @@ cell * field::look(cell * p, direction dir)
 
 void pc::go(direction dir) {parent->go(this, dir);}
 bool pc::can_go(direction dir) {return parent->can_go(this, dir);}
-
 bool field::can_go(pc * p, direction dir)
 {
     cell * tgt = look(p, dir);
@@ -181,3 +180,34 @@ void field::place_player(pc * bot)
     steps = 0;
     passed = false;
 }
+direction clockwise(direction dir)
+{
+    if(d==x)
+        return x;
+    if(x==z)
+        return z;
+    if(z==e)
+        return e;
+    if(e==w)
+        return w;
+    if(w==a)
+        return a;
+    if(a==d)
+        return d;
+}
+direction counterclockwise(direction dir)
+{
+    if(x==d)
+        return d;
+    if(z==x)
+        return x;
+    if(e==z)
+        return z;
+    if(w==e)
+        return e;
+    if(a==w)
+        return w;
+    if(d==a)
+        return a;
+}
+
