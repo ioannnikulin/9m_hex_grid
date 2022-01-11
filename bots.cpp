@@ -385,6 +385,11 @@ private:
         if (dir == z) return e;
         if (dir == a) return d;
     }
+    /*void show_surroundings(){
+        cout << " " << field_model[col-1][row-1] << " " << field_model[col][row-1] << endl;
+        cout << field_model[col-1][row] << " " << field_model[col+1][row] << endl;
+        cout << " " << field_model[col][row+1] << " " << field_model[col+1][row+1] << endl;
+    }*/
 };
 
 class turovceva_bot: public pc
