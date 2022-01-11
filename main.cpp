@@ -44,13 +44,13 @@ int main()
             }
             passed+=res;
             #if MODE == SHOW
-            getch();
+            _getch();
             system("cls");
             #endif
         }
         cout << "passed " << labyrinths.size() - failed << " labyrinths with total of " << passed << " steps" << endl;
         #if MODE == SHOW
-        getch();
+        _getch();
         #endif
     }
     return 0;
