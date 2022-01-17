@@ -60,13 +60,13 @@ void daryina_lab_1(vector<field>& labyrinths)
         labyrinths[p].set_cell(0,line0[i], new wall(NULL));
 
     }
-    vector <int> line1 = {4,5,6,9,11,15,18,19,20};
+    vector <int> line1 = {4,5,6,9,11,15,18,19}; // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i < line1.size();i++)
     {
         labyrinths[p].set_cell(1,line1[i], new wall(NULL));
 
     }
-    vector <int> line2 = {2,4,7,8,9,10,13,14,20};
+    vector <int> line2 = {2,4,7,8,9,10,13,14};  // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line2.size();i++)
     {
         labyrinths[p].set_cell(2,line2[i], new wall(NULL));
@@ -120,13 +120,13 @@ void daryina_lab_1(vector<field>& labyrinths)
         labyrinths[p].set_cell(10,line10[i], new wall(NULL));
 
     }
-    vector <int> line11 = {3,6,9,12,13,17,18,20};
+    vector <int> line11 = {3,6,9,12,13,17,18};  // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line11.size();i++)
     {
         labyrinths[p].set_cell(11,line11[i], new wall(NULL));
 
     }
-    vector <int> line12 = {3,4,7,15,20};
+    vector <int> line12 = {3,4,7,15};  // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line12.size();i++)
     {
         labyrinths[p].set_cell(12,line12[i], new wall(NULL));
@@ -138,37 +138,37 @@ void daryina_lab_1(vector<field>& labyrinths)
         labyrinths[p].set_cell(13,line13[i], new wall(NULL));
 
     }
-    vector <int> line14 = {3,7,15,16,18,19,20};
+    vector <int> line14 = {3,7,15,16,18,19};  // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line14.size();i++)
     {
         labyrinths[p].set_cell(14,line14[i], new wall(NULL));
 
     }
-    vector <int> line15 = {1,4,7,8,12,13,14,20};
+    vector <int> line15 = {1,4,7,8,12,13,14};  // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line15.size();i++)
     {
         labyrinths[p].set_cell(15,line15[i], new wall(NULL));
 
     }
-    vector <int> line16 = {3,10,12,16,17,18,20};
+    vector <int> line16 = {3,10,12,16,17,18};  // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line16.size();i++)
     {
         labyrinths[p].set_cell(16,line16[i], new wall(NULL));
 
     }
-    vector <int> line17 = {2,6,7,8,10,11,12,15,16,18,20};
+    vector <int> line17 = {2,6,7,8,10,11,12,15,16,18};  // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line17.size();i++)
     {
         labyrinths[p].set_cell(17,line17[i], new wall(NULL));
 
     }
-    vector <int> line18 = {4,9,10,16,20};
+    vector <int> line18 = {4,9,10,16}; // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line18.size();i++)
     {
         labyrinths[p].set_cell(18,line18[i], new wall(NULL));
 
     }
-    vector <int> line19 = {2,3,9,10,11,15,20};
+    vector <int> line19 = {2,3,9,10,11,15}; // remove 20 because it is breaking program on visual studio, somehow
     for(int i(0);i< line19.size();i++)
     {
         labyrinths[p].set_cell(19,line19[i], new wall(NULL));
@@ -1732,7 +1732,6 @@ labyrinths[p].set_start_col(0);
 void fill_labyrinths(vector<field>& labyrinths)
 {
 
-
     f_Art(labyrinths);
     ushenin_lab_1(labyrinths);
     labTruefunoff(labyrinths);
@@ -1745,5 +1744,6 @@ void fill_labyrinths(vector<field>& labyrinths)
     karpov_lab_1(labyrinths);
     skorodumov_lab_1(labyrinths);
     evtukhov_lab(labyrinths);
+
 }
 

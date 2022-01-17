@@ -1,5 +1,6 @@
 #include "base.hpp"
 #include <chrono>
+#include <algorithm>
 #include <thread>
 
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
