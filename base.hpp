@@ -16,7 +16,6 @@ using std::clog;
 using std::vector;
 using std::endl;
 using std::pair;
-
 class field;
 
 class cell
@@ -25,20 +24,20 @@ class cell
     friend class pc;//for row, col
 public:
     cell(field * p):col(-1),row(-1),parent(p) {}
-    virtual string str()  = 0;
-    virtual bool is_walkable()  {return false;}
-    virtual bool is_victory()  =0;
-    virtual bool is_player()  =0;
-    int get_col()  {return col;}
-    int get_row()  {return row;}
+    virtual string str() const = 0;
+    virtual bool is_walkable() const {return false;}
+    virtual bool is_victory() const =0;
+    virtual bool is_player() const =0;
+    int get_col() const {return col;}
+    int get_row() const {return row;}
     virtual ~cell() {}
 protected:
     int col;
     int row;
     field * parent;
 private:
-    cell( cell&):col(-1),row(-1),parent(NULL){}
-    cell& operator=( cell&){return *this;}
+    cell(const cell&):col(-1),row(-1),parent(NULL){}
+    cell& operator=(const cell&){return *this;}
 };
 
 enum direction
@@ -50,40 +49,40 @@ class space: public cell
 {
 public:
     space(field * p):cell(p) {}
-    virtual bool is_walkable()  {return true;}
-    virtual bool is_victory()  {return false;}
-    virtual bool is_player()  {return false;}
-    virtual string str()  {return ".";}
+    virtual bool is_walkable() const {return true;}
+    virtual bool is_victory() const {return false;}
+    virtual string str() const {return ".";}
+    virtual bool is_player() const {return false;}
 };
 
 class wall: public cell
 {
 public:
     wall(field * p):cell(p) {}
-    virtual bool is_walkable()  {return false;}
-    virtual bool is_victory()  {return false;}
-    virtual bool is_player()  {return false;}
-    virtual string str()  {return "#";}
+    virtual bool is_walkable() const {return false;}
+    virtual bool is_victory() const {return false;}
+    virtual bool is_player() const {return false;}
+    virtual string str() const {return "#";}
 };
 
 class victory: public cell
 {
 public:
     victory(field * p):cell(p) {}
-    virtual bool is_walkable()  {return false;}
-    virtual bool is_victory()  {return true;}
-    virtual bool is_player()  {return false;}
-    virtual string str()  {return "*";}
+    virtual bool is_walkable() const {return false;}
+    virtual bool is_victory() const {return true;}
+    virtual bool is_player() const {return false;}
+    virtual string str() const {return "*";}
 };
 
 class character: public cell
 {
 public:
-    virtual string str()  {return name;}
+    virtual string str() const {return name;}
     character(field * p, string n):cell(p), name(n) {}
-    virtual bool is_walkable()  {return false;}
-    virtual bool is_victory()  {return false;}
-    virtual bool is_player()  {return false;}
+    virtual bool is_walkable() const {return false;}
+    virtual bool is_victory() const {return false;}
+    virtual bool is_player() const {return false;}
 
 protected:
     string name;
@@ -94,10 +93,10 @@ class pc: public character
 public:
     pc(field * p, string n):character(p, n) {}
     void go(direction dir);
-    bool can_go(direction dir) ;
-    bool won() ;
-    float dist_to_exit() ;
-    virtual bool is_player()  {return true;}
+    bool can_go(direction dir) const;
+    bool won() const;
+    float dist_to_exit() const;
+    virtual bool is_player() const {return true;}
     virtual void ai() = 0;
 };
 
@@ -107,21 +106,21 @@ public:
     field(int rows, int cols);
     void swap(cell * f, cell * t);
     void go(pc * f, direction d);
-    bool can_go( pc * f, direction d) ;
+    bool can_go(const pc * f, direction d) const;
     void swap(int frow, int fcol, int trow, int tcol);
-    void show() ;
+    void show() const;
     void set_cell(int r, int c, cell * nc);
-    int width() ;
-    int height() ;
-    float dist_to_exit( pc * p) ;
+    int width() const;
+    int height() const;
+    float dist_to_exit(const pc * p) const;
     void set_start_row(int r) {start_row = r;}
     void set_start_col(int c) {start_col = c;}
     void place_player(pc * bot);
-    int get_steps()  {return steps;}
+    int get_steps() const {return steps;}
     void remove_bots();
 private:
     vector<vector<cell*>> cells;
-    cell * look(cell * p, direction dir) ;
+    cell * look(const cell * p, direction dir) const;
     int start_row, start_col;
     int steps;
     int ttl;

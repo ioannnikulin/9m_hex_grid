@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <thread>
 ///change settings here
- int wait_time = 10;
- int fuel_coefficient = 2;
+const int wait_time = 10;
+const int fuel_coefficient = 2;
 
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
 {
@@ -28,7 +28,7 @@ void field::swap(int frow, int fcol, int trow, int tcol)
     std::swap(cells[frow][fcol]->col, cells[trow][tcol]->col);
     std::swap(cells[frow][fcol]->row, cells[trow][tcol]->row);
 }
-void field::show()
+void field::show() const
 {
     for (size_t i(0); i<cells.size(); i++)
     {
@@ -47,16 +47,16 @@ void field::set_cell(int r, int c, cell * nc)
     nc->parent = this;
     if (nc->is_victory()) m_exits.push_back(nc);
 }
-int field::width()
+int field::width() const
 {
     return cells[0].size();
 }
-int field::height()
+int field::height() const
 {
     return cells.size();
 }
 
-float field::dist_to_exit( pc * p)
+float field::dist_to_exit(const pc * p) const
 {
     float res(width() + height());
     for (auto &j: m_exits)
@@ -67,12 +67,12 @@ float field::dist_to_exit( pc * p)
     return res;
 }
 
-float pc::dist_to_exit()
+float pc::dist_to_exit() const
 {
     return parent->dist_to_exit(this);
 }
 
-bool pc::won()
+bool pc::won() const
 {
     return (dist_to_exit() < 2);
 }
@@ -92,7 +92,7 @@ int field::interact(pc * src, cell * tgt)
 }
 
 
-cell * field::look(cell * p, direction dir)
+cell * field::look(const cell * p, direction dir) const
 {
     int row = p->row;
     int col = p->col;
@@ -148,11 +148,11 @@ cell * field::look(cell * p, direction dir)
 }
 
 void pc::go(direction dir) {parent->go(this, dir);}
-bool pc::can_go(direction dir)  {return parent->can_go(this, dir);}
+bool pc::can_go(direction dir) const {return parent->can_go(this, dir);}
 
-bool field::can_go( pc * p, direction dir)
+bool field::can_go(const pc * p, direction dir) const
 {
-    cell * tgt = look(p, dir);
+    const cell * tgt = look(p, dir);
     if (tgt!=NULL) return tgt->is_walkable();
     return false;
 }
