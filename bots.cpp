@@ -71,6 +71,43 @@ private:
 
 };
 
+class evtukhov_right_hand_bot:public pc{
+public:
+   evtukhov_right_hand_bot(field * p, string n):pc(p, n){}
+   virtual void ai(){
+       direction face=d;
+       direction hand=x;
+       while(can_go(face))go(face);
+       while(!won()){
+           while(can_go(face) && !can_go(hand))go(face);
+           while(can_go(hand)){
+            face = clockwise(face);
+            hand = clockwise(hand);
+           }
+           while(!can_go(face) and !can_go(hand)){
+            face = counter_clockwise(face);
+            hand = counter_clockwise(hand);
+           }
+       }
+   }
+private:
+    direction clockwise(direction p){
+        if (p==a) return w;
+        if (p==w) return e;
+        if (p==e) return d;
+        if (p==d) return x;
+        if (p==x) return z;
+        if (p==z) return a;
+    }
+    direction counter_clockwise(direction p){
+        if (p==a) return z;
+        if (p==w) return a;
+        if (p==e) return w;
+        if (p==d) return e;
+        if (p==x) return d;
+        if (p==z) return x;
+    }
+};
 
 
 
@@ -209,6 +246,88 @@ public:
         for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
         {
             go(i);
+        }
+    }
+};
+class truefunoff_right_hand_bot:public pc
+{
+ public:
+    truefunoff_right_hand_bot(field * p, string n):pc(p, n) {}
+    direction last_d=direction::d;
+    direction saw_d=next_d(last_d);
+    direction next_d(direction l_d)
+    {
+        if (l_d==direction::d)
+        {
+            return direction::x;
+        }
+        if (l_d==direction::x)
+        {
+            return direction::z;
+        }
+        if (l_d==direction::z)
+        {
+            return direction::a;
+        }
+        if (l_d==direction::a)
+        {
+            return direction::w;
+        }
+        if (l_d==direction::w)
+        {
+            return direction::e;
+        }
+        if (l_d==direction::e)
+        {
+            return direction::d;
+        }
+    }
+    direction try_d(direction l_d)
+    {
+        if (l_d==direction::d)
+        {
+            return direction::e;
+        }
+        if (l_d==direction::x)
+        {
+            return direction::d;
+        }
+        if (l_d==direction::z)
+        {
+            return direction::x;
+        }
+        if (l_d==direction::a)
+        {
+            return direction::z;
+        }
+        if (l_d==direction::w)
+        {
+            return direction::a;
+        }
+        if (l_d==direction::e)
+        {
+            return direction::w;
+        }
+    }
+    direction going()
+    {
+       if (can_go(saw_d))
+            {
+                return saw_d;
+            }
+            else
+            {
+                saw_d=try_d(saw_d);
+                going();
+            }
+    }
+    virtual void ai()
+    {
+        while (!won())
+        {
+            last_d=going();
+            go(last_d);
+            saw_d=next_d(last_d);
         }
     }
 };
@@ -386,8 +505,10 @@ public:
 
 void fill_bots(vector<pc*> & bots)
 {
-    bots.push_back(new jenya705::jenya705_bot_starter(jenya705::A::runA, "A*<>^")); // a*
-    bots.push_back(new jenya705::jenya705_bot_starter(jenya705::runVanilla, "?^%@\\[]JENYA705")); // vanilla
+
+    //bots.push_back(new jenya705::jenya705_bot_starter(jenya705::A::runA, "A*<>^")); // a*
+    //bots.push_back(new jenya705::jenya705_bot_starter(jenya705::runVanilla, "?^%@\\[]JENYA705")); // vanilla
+    //bots.push_back(new truefunoff_right_hand_bot(NULL, "%"));
     //bots.push_back(new right_bot(NULL, ">"));
     //bots.push_back(new panic_bot(NULL, "?"));
     //bots.push_back(new dubovenko_righthand_bot(NULL, "^"));
@@ -396,5 +517,7 @@ void fill_bots(vector<pc*> & bots)
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
     //bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
     //bots.push_back(new turovceva_bot(NULL, "1"));
+    // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
+    // bots.push_back(new turovceva_bot(NULL, "1"));
 }
 
