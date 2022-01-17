@@ -1,18 +1,9 @@
 #include "base.h"
-#include <chrono>
-#include <algorithm>
-#include <thread>
-
 using namespace std;
-
-///change settings here
-const int wait_time = 10;
-const int fuel_coefficient = 2;
-
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
 {
     for (size_t r(0); r<cells.size(); r++)
-        cells[r] = vector<cell*>(cols, NULL);
+        cells[r] = vector<cell*>(cols, nullptr);
     for (size_t r(0); r<cells.size(); r++)
     for (size_t c(0); c<cells[0].size(); c++)
     {
@@ -44,11 +35,14 @@ void field::show() const
 }
 void field::set_cell(int r, int c, cell * nc)
 {
+    //cell * old = cells[r][c];
     cells[r][c] = nc;
+    //delete old;
     nc->row = r;
     nc->col = c;
     nc->parent = this;
     if (nc->is_victory()) m_exits.push_back(nc);
+
 }
 int field::width() const
 {
@@ -70,15 +64,6 @@ float field::dist_to_exit(const pc * p) const
     return res;
 }
 
-float pc::dist_to_exit() const
-{
-    return parent->dist_to_exit(this);
-}
-
-bool pc::won() const
-{
-    return (dist_to_exit() < 2);
-}
 template<>
 int field::interact(pc * src, cell * tgt)
 {
@@ -99,7 +84,7 @@ cell * field::look(const cell * p, direction dir) const
 {
     int row = p->row;
     int col = p->col;
-    cell * tgt(NULL);
+    cell * tgt(nullptr);
     switch (dir)
     {
     case direction::d:
@@ -150,13 +135,10 @@ cell * field::look(const cell * p, direction dir) const
     return tgt;
 }
 
-void pc::go(direction dir) {parent->go(this, dir);}
-bool pc::can_go(direction dir) const {return parent->can_go(this, dir);}
-
 bool field::can_go(const pc * p, direction dir) const
 {
     const cell * tgt = look(p, dir);
-    if (tgt!=NULL) return tgt->is_walkable();
+    if (tgt!=nullptr) return tgt->is_walkable();
     return false;
 }
 
@@ -164,7 +146,7 @@ void field::go(pc * p, direction dir)
 {
     steps++;
     cell * tgt = look(p, dir);
-    if (tgt!=NULL)
+    if (tgt!=nullptr)
     {
         //clog << "go to " << tgt->row << ":" << tgt->col << endl;
         if (interact(p, tgt) == 0)
@@ -199,6 +181,6 @@ void field::remove_bots()
     for (size_t j(0); j<cells[0].size(); j++)
         if (cells[i][j]->is_player())
         {
-            set_cell(i, j, new space(NULL));
+            set_cell(i, j, new space(nullptr));
         }
 }
