@@ -18,7 +18,7 @@ int main()
     {
         int passed(0);
         int failed(0);
-        for (auto lab: labyrinths)
+        for (auto &lab: labyrinths)
         {
             lab.place_player(bot);
             #if MODE == SHOW

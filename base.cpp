@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <thread>
 ///change settings here
-int wait_time = 10;
-int fuel_coefficient = 5;
+ int wait_time = 10;
+ int fuel_coefficient = 2;
 
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
 {
@@ -45,6 +45,7 @@ void field::set_cell(int r, int c, cell * nc)
     nc->row = r;
     nc->col = c;
     nc->parent = this;
+    if (nc->is_victory()) m_exits.push_back(nc);
 }
 int field::width()
 {
@@ -55,17 +56,14 @@ int field::height()
     return cells.size();
 }
 
-float field::dist_to_exit(pc * p)
+float field::dist_to_exit( pc * p)
 {
-    if (passed) return 0;
     float res(width() + height());
-    for (auto i: cells)
-        for (auto j: i)
-            if (j->is_victory())
-            {
-                float dist = sqrt(pow(j->row - p->row, 2) + pow(j->col - p->col, 2));
-                res = std::min(dist, res);
-            }
+    for (auto &j: m_exits)
+        {
+            float dist = sqrt(pow(j->row - p->row, 2) + pow(j->col - p->col, 2));
+            res = std::min(dist, res);
+        }
     return res;
 }
 
@@ -150,9 +148,9 @@ cell * field::look(cell * p, direction dir)
 }
 
 void pc::go(direction dir) {parent->go(this, dir);}
-bool pc::can_go(direction dir) {return parent->can_go(this, dir);}
+bool pc::can_go(direction dir)  {return parent->can_go(this, dir);}
 
-bool field::can_go(pc * p, direction dir)
+bool field::can_go( pc * p, direction dir)
 {
     cell * tgt = look(p, dir);
     if (tgt!=NULL) return tgt->is_walkable();
@@ -190,7 +188,6 @@ void field::place_player(pc * bot)
     set_cell(start_row, start_col, bot);
     ttl = (width()*height())*fuel_coefficient;
     steps = 0;
-    passed = false;
 }
 
 void field::remove_bots()
