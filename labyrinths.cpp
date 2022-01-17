@@ -1,4 +1,4 @@
-#include "base.hpp"
+#include "base.h"
 #include "verybiglab.hpp"
 using namespace std;
 void f0(vector<field>& labyrinths)
