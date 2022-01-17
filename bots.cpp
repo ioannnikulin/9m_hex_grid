@@ -1,6 +1,6 @@
 #include "base.hpp"
 //#include "jenya705.hpp"
-
+using namespace std;
 class right_bot:public pc
 {
 public:

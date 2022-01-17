@@ -1,5 +1,6 @@
 #include "base.hpp"
 #include "verybiglab.hpp"
+using namespace std;
 void f0(vector<field>& labyrinths)
 {
     labyrinths.push_back(field(5,6));

@@ -2,6 +2,9 @@
 #include <chrono>
 #include <algorithm>
 #include <thread>
+
+using namespace std;
+
 ///change settings here
 const int wait_time = 10;
 const int fuel_coefficient = 2;

@@ -10,12 +10,7 @@
 #define MODE BENCHMARK
 
 
-using std::string;
-using std::cout;
-using std::clog;
-using std::vector;
-using std::endl;
-using std::pair;
+
 class field;
 
 class cell
@@ -24,7 +19,7 @@ class cell
     friend class pc;//for row, col
 public:
     cell(field * p):col(-1),row(-1),parent(p) {}
-    virtual string str() const = 0;
+    virtual std::string str() const = 0;
     virtual bool is_walkable() const {return false;}
     virtual bool is_victory() const =0;
     virtual bool is_player() const =0;
@@ -51,7 +46,7 @@ public:
     space(field * p):cell(p) {}
     virtual bool is_walkable() const {return true;}
     virtual bool is_victory() const {return false;}
-    virtual string str() const {return ".";}
+    virtual std::string str() const {return ".";}
     virtual bool is_player() const {return false;}
 };
 
@@ -62,7 +57,7 @@ public:
     virtual bool is_walkable() const {return false;}
     virtual bool is_victory() const {return false;}
     virtual bool is_player() const {return false;}
-    virtual string str() const {return "#";}
+    virtual std::string str() const {return "#";}
 };
 
 class victory: public cell
@@ -72,26 +67,26 @@ public:
     virtual bool is_walkable() const {return false;}
     virtual bool is_victory() const {return true;}
     virtual bool is_player() const {return false;}
-    virtual string str() const {return "*";}
+    virtual std::string str() const {return "*";}
 };
 
 class character: public cell
 {
 public:
-    virtual string str() const {return name;}
-    character(field * p, string n):cell(p), name(n) {}
+    virtual std::string str() const {return name;}
+    character(field * p, std::string n):cell(p), name(n) {}
     virtual bool is_walkable() const {return false;}
     virtual bool is_victory() const {return false;}
     virtual bool is_player() const {return false;}
 
 protected:
-    string name;
+    std::string name;
 };
 
 class pc: public character
 {
 public:
-    pc(field * p, string n):character(p, n) {}
+    pc(field * p, std::string n):character(p, n) {}
     void go(direction dir);
     bool can_go(direction dir) const;
     bool won() const;
@@ -119,7 +114,7 @@ public:
     int get_steps() const {return steps;}
     void remove_bots();
 private:
-    vector<vector<cell*>> cells;
+    std::vector<std::vector<cell*>> cells;
     cell * look(const cell * p, direction dir) const;
     int start_row, start_col;
     int steps;
@@ -127,12 +122,12 @@ private:
 
     template <class T1, class T2>
     int interact(T1 * src, T2 * tgt);
-    vector<cell*> m_exits;
+    std::vector<cell*> m_exits;
 };
 
 
 
-void fill_labyrinths(vector<field> & labyrinths);
-void fill_bots(vector<pc*> & bots);
+void fill_labyrinths(std::vector<field> & labyrinths);
+void fill_bots(std::vector<pc*> & bots);
 
 #endif // BASE_HPP_INCLUDED
