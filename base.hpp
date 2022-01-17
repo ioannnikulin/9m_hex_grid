@@ -117,7 +117,7 @@ public:
     void set_start_col(int c) {start_col = c;}
     void place_player(pc * bot);
     int get_steps() {return steps;}
-
+    void remove_bots();
 private:
     vector<vector<cell*>> cells;
     cell * look(cell * p, direction dir);

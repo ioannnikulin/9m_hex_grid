@@ -31,6 +31,7 @@ int main()
                 bot->ai();
                 res=lab.get_steps();
                 if (lab.dist_to_exit(bot)>=2) throw std::runtime_error("didn't finish in the right spot");
+                lab.remove_bots();
                 #if MODE == SHOW
                 cout << "done!" << endl;
                 #endif

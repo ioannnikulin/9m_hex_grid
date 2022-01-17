@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <thread>
 ///change settings here
-int wait_time = 100;
+int wait_time = 10;
 int fuel_coefficient = 5;
 
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
@@ -179,14 +179,26 @@ void field::go(pc * p, direction dir)
     }
     if (steps >= ttl)
     {
+        remove_bots();
         throw std::runtime_error("bot out of gas");
     }
 }
 
 void field::place_player(pc * bot)
 {
+    remove_bots();
     set_cell(start_row, start_col, bot);
     ttl = (width()*height())*fuel_coefficient;
     steps = 0;
     passed = false;
+}
+
+void field::remove_bots()
+{
+    for (size_t i(0); i<cells.size(); i++)
+    for (size_t j(0); j<cells[0].size(); j++)
+        if (cells[i][j]->is_player())
+        {
+            set_cell(i, j, new space(NULL));
+        }
 }
