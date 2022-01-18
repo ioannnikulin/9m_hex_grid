@@ -389,21 +389,26 @@ public:
 
     virtual void ai()
     {
-        int wall(88);
-        int fog(99);
-            vector<vector<float> > map1(21,vector<float>(21,fog));
+            vector<vector<float> > map1(11,vector<float>(11,fog));
             vector<pair<int,int> > vozm;
 
-    int x(10),y(10);
+    int x(5),y(5);
         while(!won()){
             direction ld=w;
             float dist=dist_to_exit();
+            map1[y][x]=dist;
         for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
         {
-            if(can_go(i) and map1[dy(i,y)][dx(i,x,y)]==fog){
+            bool cg = can_go(i);
+            int deltay=dy(i,y),deltax(i,x,y);
+            if(cg and map1[deltay][deltax]==fog){
                 go(i);
-                map1[dy(i,y)][dx(i,x,y)]=dist_to_exit();
-                vozm.push_back({dy(i,y),dx(i,x,y)});
+                map1[deltay][deltax]=dist_to_exit();
+                if(map1[vozm[vozm.end()][0]]vozm[vozm.end()][1]]}>map1[deltay][deltax]){
+
+                vozm.push_back({deltay,deltax});
+                }
+
             if(dist_to_exit()<dist){
                     ld=i;
                     dist=dist_to_exit();
@@ -411,30 +416,32 @@ public:
                 go(raz(i));
             }
             if(!can_go(i)){
-            map1[dy(i,y)][dx(i,x,y)]=wall;
+            map1[deltay][deltax]=wall;
             }
             show(map1,x,y);
-
         }
-        y=dy(ld,y);
         x=dx(ld,x,y);
+        y=dy(ld,y);
         go(ld);
 
         }
     }
 private:
+    static const int wall=888;
+    static const int fog=999;
 void show(vector<vector<float>> a, int x, int y){
 for(int i=0;i<a.size();i++){
     for(int j=0;j<a[0].size();j++){
         char s=' ';
         if (i==y and j==x) s = '*';
-        else if(a[i][j]==99){s='F';}
-        else if(a[i][j]==88){s='W';}
+        else if(a[i][j]==fog){s='F';}
+        else if(a[i][j]==wall){s='W';}
         if(i%2==1){cout<<s<<' ';}
         else{cout<<' '<<s;}
     }
     cout<<endl;
 }
+cout << std::flush;
 }
 int dx(direction p,int x1,int y){
         if (p==d) return x1+1;
@@ -449,9 +456,9 @@ int dx(direction p,int x1,int y){
         }
 }
 int dy(direction p,int y){
-if(p==w or p==e) return y-1;
-if(p==a or p==d) return y;
-if(p==z or p==x) return y+1;
+if(p==direction::w or p==direction::e) return y-1;
+if(p==direction::a or p==direction::d) return y;
+if(p==direction::z or p==direction::x) return y+1;
 }
 direction cw(direction p)
     {
@@ -471,6 +478,11 @@ direction raz(direction p)
         if (p==w) return x;
         if (p==e) return z;
     }
+vector<pair<int,int> > namesto(vector<pair<int,int> > v,vector<vector<float> > m,int x,int y){
+                if(map1[vozm[vozm.end()][0]]vozm[vozm.end()][1]]}>map1[deltay][deltax]){
+
+                vozm.push_back({deltay,deltax});
+                }
 };
 void fill_bots(vector<pc*> & bots)
 {

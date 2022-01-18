@@ -22,6 +22,7 @@ int main()
         {
             lab.place_player(bot);
             #if MODE == SHOW
+
             system("cls");
             lab.show();
             #endif
