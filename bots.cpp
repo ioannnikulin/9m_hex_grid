@@ -528,13 +528,15 @@ public:
                     if(!can_go(i))field_model[row+deltas.first][col+deltas.second]=wall;
                     else
                     {
-                        if(field_model[row+delta(i).first][col+delta(i).second]==fog)
+                        if(field_model[row+deltas.first][col+deltas.second]==fog)
                         {
                             go(i);
                             field_model[row+deltas.first][col+deltas.second]=dist_to_exit();
                             go(op_napr(i));
                         }
-                        if(field_model[row+delta(i).first][col+delta(i).second]<field_model[choice_coord.first][choice_coord.second])
+                        int to=field_model[row+deltas.first][col+deltas.second];
+                        int best=field_model[choice_coord.first][choice_coord.second];
+                        if(field_model[row+deltas.first][col+deltas.second]<field_model[choice_coord.first][choice_coord.second])
                         {
                             choice=i;
                             choice_coord.first=row+delta(i).first;
@@ -543,9 +545,13 @@ public:
                     }
                 }
             go(choice);
-            muwu.insert(muwu.begin(), choice);
-            if(muwu.size()>10)
+            row=row+delta(choice).first;
+            col=col+delta(choice).second;
+          muwu.insert(muwu.begin(), choice);
+          int sss=muwu.size();
+           if(muwu.size()>10)
             {
+                int qwe=0;
                 for(int i=0; i<muwu.size(); i++)
                 {
                     go(op_napr(muwu[i]));
@@ -575,11 +581,35 @@ private:
 		if (dir == z)return{1,-row%2};
 		if (dir == a)return{0,-1};
 	}
+	 void print_model()
+    {
+        std::ofstream fs("data.txt", std::ios_base::app);
+        for (size_t i(0); i<field_model.size(); i++)
+        {
+            if (i%2 == 0) fs << std::setw(6) << " ";
+            for (auto j: field_model[i])
+                fs << std::setw(6) << j << " ";
+            fs << endl;
+        }
+        fs << endl << std::flush;
+        fs.close();
+    }
+    void look_around()
+    {
+        cout << " " << field_model[row+delta(w).first][col+delta(w).second]<< " ";
+        cout << field_model[row+delta(e).first][col+delta(e).second]<< endl;
+        cout << field_model[row+delta(a).first][col+delta(a).second]<< " ";
+        cout << field_model[row][col]<< " ";
+        cout << field_model[row+delta(d).first][col+delta(d).second]<< endl;
+        cout << " " << field_model[row+delta(z).first][col+delta(z).second]<< " ";
+        cout << field_model[row+delta(x).first][col+delta(x).second]<< " ";
+    }
+
 };
 void fill_bots(vector<pc*> & bots)
 {
 
-    bots.push_back(new truefunoff_right_hand_bot(NULL, "%"));
+   /// bots.push_back(new truefunoff_right_hand_bot(NULL, "%"));
 
     //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     //bots.push_back(new right_bot(NULL, ">"));
@@ -590,6 +620,6 @@ void fill_bots(vector<pc*> & bots)
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
     // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
    // bots.push_back(new turovceva_bot(NULL, "1"));
-   // bots.push_back(new turovceva_bot_A(NULL, "1"));
+    bots.push_back(new turovceva_bot_A(NULL, "1"));
 }
 
