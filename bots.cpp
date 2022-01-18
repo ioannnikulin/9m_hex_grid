@@ -521,7 +521,7 @@ public:
         choice_coord.first = row + delta(w).first;
         choice_coord.second = col + delta(w).second;
         for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
-        {
+        {   go(choice);
             pair<int,int> deltas = delta(i);
             if (!can_go(i))
                 field_model[row + deltas.first][col + deltas.second] = wall;
@@ -529,9 +529,10 @@ public:
             {
                 go (i);
                 field_model[row + deltas.first][col + deltas.second] = dist_to_exit();
+                go (backwards(i));
             }
-        go(choice);
-        while (field_model[row + deltas.first][col + deltas.second] < field_model[choice_coord.first][choice_coord.second])
+
+        if (field_model[row + deltas.first][col + deltas.second] < field_model[choice_coord.first][choice_coord.second])
             {
                     choice = i;
                     choice_coord.first = row + delta(i).first;
@@ -564,6 +565,19 @@ private:
 
 
     }
+   /* void print_model()
+    {
+        std::ofstream fs("data.txt", std::ios_base::app);
+        for (size_t i(0); i<field_model.size(); i++)
+        {
+            if (i%2 == 0) fs << std::setw(6) << " ";
+            for (auto j: field_model[i])
+                fs << std::setw(6) << j << " ";
+            fs << endl;
+        }
+        fs << endl << std::flush;
+        fs.close();
+    } */
 
 };
 
