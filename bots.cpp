@@ -501,7 +501,81 @@ public:
        }
     }
 };
-
+class turovceva_bot_A:public pc
+{
+public:
+        turovceva_bot_A(field * p, string n):pc(p, n){}
+        virtual void ai()
+        {
+            int wall(999);
+            int fog(9999);
+            float cur_dist = dist_to_exit();
+            vector<vector<float>>field_model(50, vector<float>(50, fog));
+            vector<direction>muwu(0);
+            field_model[row][col]=cur_dist;
+            direction choice = w;
+            std::pair<int,int> choice_coord(-1,-1);
+            choice_coord.first=row+delta(w).first;
+            choice_coord.second=col+delta(w).second;
+            while(!won())
+        {
+            choice=w;
+            choice_coord.first=row+delta(w).first;
+            choice_coord.second=col+delta(w).second;
+            for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
+                {
+                    std::pair<int, int> deltas=delta(i);
+                    if(!can_go(i))field_model[row+deltas.first][col+deltas.second]=wall;
+                    else
+                    {
+                        if(field_model[row+delta(i).first][col+delta(i).second]==fog)
+                        {
+                            go(i);
+                            field_model[row+deltas.first][col+deltas.second]=dist_to_exit();
+                            go(op_napr(i));
+                        }
+                        if(field_model[row+delta(i).first][col+delta(i).second]<field_model[choice_coord.first][choice_coord.second])
+                        {
+                            choice=i;
+                            choice_coord.first=row+delta(i).first;
+                            choice_coord.second=col+delta(i).second;
+                        }
+                    }
+                }
+            go(choice);
+            muwu.insert(muwu.begin(), choice);
+            if(muwu.size()>10)
+            {
+                for(int i=0; i<muwu.size(); i++)
+                {
+                    go(op_napr(muwu[i]));
+                    field_model[row+delta(op_napr(muwu[i])).first][col+delta(op_napr(muwu[i])).second]+=1;
+                }
+                muwu.resize(0);
+            }
+        }
+        }
+private:
+    int row=25, col=25;
+    direction op_napr (direction k)
+        {
+            if(k==w)return x;
+            if(k==e)return z;
+            if(k==d)return a;
+            if(k==x)return w;
+            if(k==z)return e;
+            if(k==a)return d;
+        }
+    std::pair<int, int>delta(direction dir)
+	{
+		if (dir == w)return{-1,-row%2};
+		if (dir == e)return{-1,1-row%2};
+		if (dir == d)return{0,1};
+        if (dir == x)return{1,1-row%2};
+		if (dir == z)return{1,-row%2};
+		if (dir == a)return{0,-1};
+	}
+};
 void fill_bots(vector<pc*> & bots)
 {
 
@@ -516,6 +590,6 @@ void fill_bots(vector<pc*> & bots)
     //bots.push_back(new ermolaeva_right_hand_bot(NULL, "?"));
     // bots.push_back(new right_hand_tokarenko_bot(NULL, "!"));
    // bots.push_back(new turovceva_bot(NULL, "1"));
-
+   // bots.push_back(new turovceva_bot_A(NULL, "1"));
 }
 
