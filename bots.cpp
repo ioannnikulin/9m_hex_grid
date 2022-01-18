@@ -528,8 +528,7 @@ public:
         pair<int,int> choice_coord({-1,-1});
         choice_coord.first = row + delta(w).first;
         choice_coord.second = col + delta(w).second;
-        int t(5);
-        while(t--)//(dist_to_exit()>1)
+        while(dist_to_exit()>1)
             {
         for(auto i:{direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
             {
@@ -549,12 +548,11 @@ public:
                         choice_coord.first = row + delta(i).first;
                         choice_coord.second = col + delta(i).second;
                     }
-                    print_model();
             }
-            look_around();
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            getch();
+
             go(choice);
+            row=row+delta(choice).first;
+            col=col+delta(choice).second;
 
     }}
 private:
@@ -570,29 +568,6 @@ private:
         if(dir==z)return{1, -row%2};
     }
 
-    void print_model()
-    {
-        std::ofstream fs("data.txt", std::ios_base::app);
-        for (size_t i(0); i<field_model.size(); i++)
-        {
-            if (i%2 == 0) fs << std::setw(6) << " ";
-            for (auto j: field_model[i])
-                fs << std::setw(6) << j << " ";
-            fs << endl;
-        }
-        fs << endl << std::flush;
-        fs.close();
-    }
-    void look_around()
-    {
-        cout << " " << field_model[row+delta(w).first][col+delta(w).second]<< " ";
-        cout << field_model[row+delta(e).first][col+delta(e).second]<< endl;
-        cout << field_model[row+delta(a).first][col+delta(a).second]<< " ";
-        cout << field_model[row][col]<< " ";
-        cout << field_model[row+delta(d).first][col+delta(d).second]<< endl;
-        cout << " " << field_model[row+delta(z).first][col+delta(z).second]<< " ";
-        cout << field_model[row+delta(x).first][col+delta(x).second]<< " ";
-    }
 };
 void fill_bots(vector<pc*> & bots)
 {
