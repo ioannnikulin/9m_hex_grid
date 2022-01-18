@@ -502,7 +502,111 @@ public:
        }
     }
 };
+class turovceva_bot_A:public pc
+{
+public:
+        turovceva_bot_A(field * p, string n):pc(p, n){}
+        virtual void ai()
+        {
+            int wall(999);
+            int fog(9999);
+            float cur_dist = dist_to_exit();
+            vector<vector<float>>field_model(50, vector<float>(50, fog));
+            vector<direction>muwu(0);
+            field_model[row][col]=cur_dist;
+            direction choice = w;
+            std::pair<int,int> choice_coord(-1,-1);
+            choice_coord.first=row+delta(w).first;
+            choice_coord.second=col+delta(w).second;
+            while(!won())
+        {
+            choice=w;
+            choice_coord.first=row+delta(w).first;
+            choice_coord.second=col+delta(w).second;
+            for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a})
+                {
+                    std::pair<int, int> deltas=delta(i);
+                    if(!can_go(i))field_model[row+deltas.first][col+deltas.second]=wall;
+                    else
+                    {
+                        if(field_model[row+deltas.first][col+deltas.second]==fog)
+                        {
+                            go(i);
+                            field_model[row+deltas.first][col+deltas.second]=dist_to_exit();
+                            go(op_napr(i));
+                        }
+                        int to=field_model[row+deltas.first][col+deltas.second];
+                        int best=field_model[choice_coord.first][choice_coord.second];
+                        if(field_model[row+deltas.first][col+deltas.second]<field_model[choice_coord.first][choice_coord.second])
+                        {
+                            choice=i;
+                            choice_coord.first=row+delta(i).first;
+                            choice_coord.second=col+delta(i).second;
+                        }
+                    }
+                }
+            go(choice);
+            row=row+delta(choice).first;
+            col=col+delta(choice).second;
+          muwu.insert(muwu.begin(), choice);
+          int sss=muwu.size();
+           if(muwu.size()>10)
+            {
+                int qwe=0;
+                for(int i=0; i<muwu.size(); i++)
+                {
+                    go(op_napr(muwu[i]));
+                    field_model[row+delta(op_napr(muwu[i])).first][col+delta(op_napr(muwu[i])).second]+=1;
+                }
+                muwu.resize(0);
+            }
+        }
+        }
+private:
+    int row=25, col=25;
+    direction op_napr (direction k)
+        {
+            if(k==w)return x;
+            if(k==e)return z;
+            if(k==d)return a;
+            if(k==x)return w;
+            if(k==z)return e;
+            if(k==a)return d;
+        }
+    std::pair<int, int>delta(direction dir)
+	{
+		if (dir == w)return{-1,-row%2};
+		if (dir == e)return{-1,1-row%2};
+		if (dir == d)return{0,1};
+        if (dir == x)return{1,1-row%2};
+		if (dir == z)return{1,-row%2};
+		if (dir == a)return{0,-1};
+	}
+	/* void print_model()
+    {
+        std::ofstream fs("data.txt", std::ios_base::app);
+        for (size_t i(0); i<field_model.size(); i++)
+        {
+            if (i%2 == 0) fs << std::setw(6) << " ";
+            for (auto j: field_model[i])
+                fs << std::setw(6) << j << " ";
+            fs << endl;
+        }
+        fs << endl << std::flush;
+        fs.close();
+    }
+    void look_around()
+    {
+        cout << " " << field_model[row+delta(w).first][col+delta(w).second]<< " ";
+        cout << field_model[row+delta(e).first][col+delta(e).second]<< endl;
+        cout << field_model[row+delta(a).first][col+delta(a).second]<< " ";
+        cout << field_model[row][col]<< " ";
+        cout << field_model[row+delta(d).first][col+delta(d).second]<< endl;
+        cout << " " << field_model[row+delta(z).first][col+delta(z).second]<< " ";
+        cout << field_model[row+delta(x).first][col+delta(x).second]<< " ";
+    }*/
 
+};
 void fill_bots(vector<pc*> & bots)
 {
 
