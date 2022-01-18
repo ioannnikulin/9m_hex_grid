@@ -9,6 +9,7 @@
 #include <mutex>
 #include <array>
 #include <cmath>
+#include "base.h"
 #include "safe.hpp"
 
 using namespace std;
@@ -30,7 +31,7 @@ namespace jenya705 {
 
     #define DEFAULT_WIDTH 100
 
-    #define DEBUG 2
+    #define DEBUG 0
     #define FUTURE 0
 
     #if VS == 0

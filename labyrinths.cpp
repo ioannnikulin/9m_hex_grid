@@ -1,5 +1,4 @@
 #include "base.h"
-#include "verybiglab.hpp"
 using namespace std;
 void f0(vector<field>& labyrinths)
 {
@@ -1745,7 +1744,6 @@ void fill_labyrinths(vector<field>& labyrinths)
 	sidorova_lab_1(labyrinths);
     karpov_lab_1(labyrinths);
     skorodumov_lab_1(labyrinths);
-    very_big_lab(labyrinths);
     evtukhov_lab(labyrinths);
     f0(labyrinths);
 
