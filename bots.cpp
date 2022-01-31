@@ -4,7 +4,7 @@
 
 class right_bot : public pc {
 public:
-    right_bot(field *p, string n) : pc(p, n) {}
+    right_bot(field* p, string n) : pc(p, n) {}
 
     virtual void ai() {
         while (can_go(d)) {
@@ -15,7 +15,7 @@ public:
 
 class sidorova_right_hand_bot : public pc {
 public:
-    sidorova_right_hand_bot(field *p, string n) : pc(p, n) {}
+    sidorova_right_hand_bot(field* p, string n) : pc(p, n) {}
 
     virtual void ai() {
         direction face = d;
@@ -67,7 +67,7 @@ private:
 
 class ermolaeva_right_hand_bot : public pc {
 public:
-    ermolaeva_right_hand_bot(field *p, string n) : pc(p, n) {}
+    ermolaeva_right_hand_bot(field* p, string n) : pc(p, n) {}
 
     virtual void ai() {
         direction face = d;
@@ -82,13 +82,15 @@ public:
                 if (!can_go(face)) {
                     hand = clockwise(hand);
                     face = clockwise(face);
-                } else break;
+                }
+                else break;
             }
             for (int i = 1; i > 0; i = 1) {
                 if (can_go(hand)) {
                     hand = clockwise(hand);
                     face = clockwise(face);
-                } else break;
+                }
+                else break;
             }
 
             for (int i = 1; i > 0; i = 1) {
@@ -99,7 +101,8 @@ public:
                 if (!can_go(hand) and !can_go(face)) {
                     hand = counterclockwise(hand);
                     face = counterclockwise(face);
-                } else break;
+                }
+                else break;
             }
         }
     }
@@ -126,7 +129,7 @@ private:
 
 class right_hand_tokarenko_bot : public pc {
 public:
-    right_hand_tokarenko_bot(field *p, string n) : pc(p, n) {}
+    right_hand_tokarenko_bot(field* p, string n) : pc(p, n) {}
 
     virtual void ai() {
         direction face = d;
@@ -172,50 +175,88 @@ private:
 
 class panic_bot : public pc {
 public:
-    panic_bot(field *p, string n) : pc(p, n) {}
+    panic_bot(field* p, string n) : pc(p, n) {}
 
     virtual void ai() {
         while (!won())
-            for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a}) {
+            for (auto i : { direction::w, direction::e, direction::d, direction::x, direction::z, direction::a }) {
                 go(i);
             }
     }
 };
 
+struct StorageA
+{
+    double dist = 9999;
+    direction from = direction::w;
+    bool visited = false;
+    bool dead_end = false;
+};
+
 class a_star_bot : public pc {
-
 public:
-    a_star_bot(field *p, string n) : pc(p, n) {}
+    a_star_bot(field* p, string n) : pc(p, n) {}
 
-    virtual void ai() {
+    virtual void ai()
+    {
         using std::pair;
         int wall(999);
         int fog(9999);
-        vector<vector<double>> field_model(50, vector<double>(50, 9999));
-        field_model[row][col] = dist_to_exit();
-        direction choice = w;
-        while (!won()) {
+        vector<vector<StorageA>> field_model(50, vector<StorageA>(50));
+        field_model[row][col].dist = dist_to_exit();
+        while (!won())
+        {
             double cur_dist = dist_to_exit();
-            double min_dist = cur_dist;
-            for (auto i: {direction::w, direction::e, direction::d, direction::x, direction::z, direction::a}) {
+            double min_dist = 999;
+
+            for (auto i : { direction::w, direction::e, direction::d, direction::x, direction::z, direction::a })
+            {
                 pair<int, int> deltas = delta(i);
+                int row_i = row + deltas.first;
+                int col_i = col + deltas.second;
+            }
+
+            bool has_choice = false;
+            direction choice = w;
+            for (auto i : { direction::w, direction::e, direction::d, direction::x, direction::z, direction::a })
+            {
+                pair<int, int> deltas = delta(i);
+                int row_i = row + deltas.first;
+                int col_i = col + deltas.second;
+
                 if (!can_go(i))
                 {
-                    field_model[row + deltas.first][col + deltas.second] = wall;
+                    field_model[row_i][col_i].dist = wall;
+                    continue;
                 }
-                if (can_go(i) and field_model[row + deltas.first][col + deltas.second] == fog)
+
+                if (field_model[row_i][col_i].dead_end) continue;
+                if (field_model[row_i][col_i].visited) continue;
+
+                if (can_go(i) and field_model[row_i][col_i].dist == fog)
                 {
                     do_go(i);
-                    field_model[row + deltas.first][col + deltas.second] = dist_to_exit();
+                    field_model[row_i][col_i].dist = dist_to_exit();
                     do_go(opposite(i));
                 }
-                if (field_model[row + deltas.first][col + deltas.second] < min_dist)
+                if (field_model[row_i][col_i].dist < min_dist)
                 {
-                    min_dist = field_model[row + deltas.first][col + deltas.second];
+                    min_dist = field_model[row_i][col_i].dist;
                     choice = i;
+                    has_choice = true;
                 }
             }
-            do_go(choice);
+            if (has_choice)
+            {
+                do_go(choice);
+                field_model[row][col].from = choice;
+                field_model[row][col].visited = true;
+            }
+            else
+            {
+                field_model[row][col].dead_end = true;
+                do_go(opposite(field_model[row][col].from));
+            }
         }
 
     }
@@ -223,12 +264,12 @@ public:
 private:
     std::pair<int, int> delta(direction dir)
     {
-        if (dir == w) return {- 1,  row%2 - 1};
-        if (dir == a) return {0, -1};
-        if (dir == z) return {1,  row%2 - 1};
-        if (dir == x) return {1, row%2 + 1};
-        if (dir == d) return {0, 1};
-        if (dir == e) return {-1, row%2 + 1};
+        if (dir == w) return { -1, row % 2 - 1 };
+        if (dir == a) return { 0, -1 };
+        if (dir == z) return { 1, row % 2 - 1 };
+        if (dir == x) return { 1, row % 2 };
+        if (dir == d) return { 0, 1 };
+        if (dir == e) return { -1, row % 2 };
     }
 
     direction opposite(direction dir)
@@ -251,7 +292,6 @@ private:
 
     int row = 25, col = 25;
 };
-
 
 class dubovenko_righthand_bot : public pc {
 private:
@@ -287,7 +327,7 @@ private:
     }
 
 public:
-    dubovenko_righthand_bot(field *p, string n) : pc(p, n) {}
+    dubovenko_righthand_bot(field* p, string n) : pc(p, n) {}
 
     virtual void ai() {
         direction face = d;
@@ -319,7 +359,7 @@ public:
 
 class skorodumov_right_hand_bot : public pc {
 public:
-    skorodumov_right_hand_bot(field *p, string n) : pc(p, n) {}
+    skorodumov_right_hand_bot(field* p, string n) : pc(p, n) {}
 
     direction start_dir() {
         /*vector<int> dirs(6,0);
@@ -331,7 +371,7 @@ public:
         if(can_go(x))dirs[4]=1;
         if(can_go(z))dirs[5]=1;
         for(int i(0);i<6;i++){if(dirs[i]==1)set_dir=i;break;}*/
-        for (auto i: {direction::a, direction::w, direction::e, direction::d, direction::x, direction::z})
+        for (auto i : { direction::a, direction::w, direction::e, direction::d, direction::x, direction::z })
             if (can_go(i)) return i;
     }
 
@@ -382,7 +422,7 @@ public:
 
 class turovceva_bot : public pc {
 public:
-    turovceva_bot(field *p, string n) : pc(p, n) {}
+    turovceva_bot(field* p, string n) : pc(p, n) {}
 
     direction choose_dir(int n, int m) {
         direction y = direction::d;
@@ -444,7 +484,7 @@ public:
     }
 };
 
-void fill_bots(vector<pc *> &bots) {
+void fill_bots(vector<pc*>& bots) {
 
     //bots.push_back(new jenya705::jenya705_bot_starter(NULL));
     bots.push_back(new a_star_bot(NULL, ">"));
