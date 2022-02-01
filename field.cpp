@@ -1,11 +1,9 @@
-#include "base.hpp"
-#include <chrono>
-#include <thread>
-
+#include "base.h"
+using namespace std;
 field::field(int rows, int cols):cells(vector<vector<cell*>>(rows)),start_row(-1),start_col(-1),steps(0),ttl(0)
 {
     for (size_t r(0); r<cells.size(); r++)
-        cells[r] = vector<cell*>(cols, NULL);
+        cells[r] = vector<cell*>(cols, nullptr);
     for (size_t r(0); r<cells.size(); r++)
     for (size_t c(0); c<cells[0].size(); c++)
     {
@@ -24,7 +22,7 @@ void field::swap(int frow, int fcol, int trow, int tcol)
     std::swap(cells[frow][fcol]->col, cells[trow][tcol]->col);
     std::swap(cells[frow][fcol]->row, cells[trow][tcol]->row);
 }
-void field::show()
+void field::show() const
 {
     for (size_t i(0); i<cells.size(); i++)
     {
@@ -37,61 +35,56 @@ void field::show()
 }
 void field::set_cell(int r, int c, cell * nc)
 {
+    //cell * old = cells[r][c];
     cells[r][c] = nc;
+    //delete old;
     nc->row = r;
     nc->col = c;
     nc->parent = this;
+    if (nc->is_victory()) m_exits.push_back(nc);
+
 }
-int field::width()
+int field::width() const
 {
     return cells[0].size();
 }
-int field::height()
+int field::height() const
 {
     return cells.size();
 }
 
-float field::dist_to_exit(pc * p)
+float field::dist_to_exit(const pc * p) const
 {
-    if (passed) return 0;
     float res(width() + height());
-    for (auto i: cells)
-        for (auto j: i)
-            if (j->is_victory())
-            {
-                float dist = sqrt(pow(j->row - p->row, 2) + pow(j->col - p->col, 2));
-                res = std::min(dist, res);
-            }
+    for (auto &j: m_exits)
+        {
+            float dist = sqrt(pow(j->row - p->row, 2) + pow(j->col - p->col, 2));
+            res = std::min(dist, res);
+        }
     return res;
 }
 
-float pc::dist_to_exit()
-{
-    return parent->dist_to_exit(this);
-}
-
-bool pc::won()
-{
-    return (dist_to_exit() < 2);
-}
-
-
-int interact(pc * src, cell * tgt, field * f)
+template<>
+int field::interact(pc * src, cell * tgt)
 {
     if (tgt->is_walkable())
     {
-        f->swap(src, tgt);
+        int x(tgt->col), y(tgt->row);
+        int xs(src->col), ys(src->row);
+        delete tgt;
+        set_cell(y,x,src);
+        set_cell(ys,xs,new space(this));
         return 0;
     }
     return -1;
 }
 
 
-cell * field::look(cell * p, direction dir)
+cell * field::look(const cell * p, direction dir) const
 {
     int row = p->row;
     int col = p->col;
-    cell * tgt(NULL);
+    cell * tgt(nullptr);
     switch (dir)
     {
     case direction::d:
@@ -142,13 +135,10 @@ cell * field::look(cell * p, direction dir)
     return tgt;
 }
 
-void pc::go(direction dir) {parent->go(this, dir);}
-bool pc::can_go(direction dir) {return parent->can_go(this, dir);}
-
-bool field::can_go(pc * p, direction dir)
+bool field::can_go(const pc * p, direction dir) const
 {
-    cell * tgt = look(p, dir);
-    if (tgt!=NULL) return tgt->is_walkable();
+    const cell * tgt = look(p, dir);
+    if (tgt!=nullptr) return tgt->is_walkable();
     return false;
 }
 
@@ -156,28 +146,41 @@ void field::go(pc * p, direction dir)
 {
     steps++;
     cell * tgt = look(p, dir);
-    if (tgt!=NULL)
+    if (tgt!=nullptr)
     {
         //clog << "go to " << tgt->row << ":" << tgt->col << endl;
-        if (interact(p, tgt, this) == 0)
+        if (interact(p, tgt) == 0)
         #if MODE == SHOW
+        {
             system("cls");
             show();//if interact successful, smth changed
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(wait_time));
+        }
         #else
             ;
         #endif
     }
     if (steps >= ttl)
     {
+        remove_bots();
         throw std::runtime_error("bot out of gas");
     }
 }
 
 void field::place_player(pc * bot)
 {
+    remove_bots();
     set_cell(start_row, start_col, bot);
-    ttl = (width()*height())*5;//TODO
+    ttl = (width()*height())*fuel_coefficient;
     steps = 0;
-    passed = false;
+}
+
+void field::remove_bots()
+{
+    for (size_t i(0); i<cells.size(); i++)
+    for (size_t j(0); j<cells[0].size(); j++)
+        if (cells[i][j]->is_player())
+        {
+            set_cell(i, j, new space(nullptr));
+        }
 }

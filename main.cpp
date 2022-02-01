@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "base.hpp"
+#include "base.h"
 #include <conio.h>
 
 using namespace std;
@@ -18,7 +18,7 @@ int main()
     {
         int passed(0);
         int failed(0);
-        for (auto lab: labyrinths)
+        for (auto &lab: labyrinths)
         {
             lab.place_player(bot);
             #if MODE == SHOW
@@ -31,6 +31,7 @@ int main()
                 bot->ai();
                 res=lab.get_steps();
                 if (lab.dist_to_exit(bot)>=2) throw std::runtime_error("didn't finish in the right spot");
+                lab.remove_bots();
                 #if MODE == SHOW
                 cout << "done!" << endl;
                 #endif
@@ -44,13 +45,13 @@ int main()
             }
             passed+=res;
             #if MODE == SHOW
-            getch();
+            _getch();
             system("cls");
             #endif
         }
         cout << "passed " << labyrinths.size() - failed << " labyrinths with total of " << passed << " steps" << endl;
         #if MODE == SHOW
-        getch();
+        _getch();
         #endif
     }
     return 0;
